@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elisa de Bussy — Psychopraticienne &amp; thérapeute | Mérignac</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <meta name="theme-color" content="#C48A71" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────────────── */
+    :root {
+      --cream:        #FAF8F5;
+      --beige:        #F3EFEA;
+      --beige-mid:    #E8E2D9;
+      --text:         #2B2927;
+      --text-light:   #6B6560;
+      --accent:       #C48A71;
+      --sage:         #8A9A86;
+      --white:        #FFFFFF;
+
+      --serif:        'Cormorant Garamond', Georgia, serif;
+      --sans:         'DM Sans', system-ui, sans-serif;
+
+      --radius:       2px;
+      --transition:   all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background-color: var(--cream);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; object-fit: cover; }
+    ul { list-style: none; }
+
+    /* ─── Utilities ──────────────────────────────────────────────── */
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .serif { font-family: var(--serif); }
+    .accent-dot { color: var(--accent); }
+
+    /* ─── Header / Nav ───────────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+    header.scrolled {
+      background: rgba(250, 248, 245, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      box-shadow: 0 1px 0 var(--beige-mid);
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+    .logo span { display: block; font-style: italic; font-weight: 300; color: var(--text-light); font-size: 0.9rem; }
+
+    nav { display: flex; align-items: center; gap: 2.5rem; }
+    nav a {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      position: relative;
+      transition: var(--transition);
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: var(--transition);
+    }
+    nav a:hover { color: var(--text); }
+    nav a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: var(--white) !important;
+      transition: var(--transition);
+    }
+    .nav-cta:hover {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--cream) !important;
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span {
+      display: block; width: 24px; height: 1px;
+      background: var(--text); transition: var(--transition);
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    #accueil {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding-top: 6rem;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      padding: 4rem 2rem 4rem 6rem;
+      animation: fadeUp 1s ease both;
+    }
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hero-label::before {
+      content: '';
+      display: block; width: 30px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      max-width: 380px;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .hero-location {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      background: var(--text);
+      color: var(--cream);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+    .btn-primary:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+      position: relative;
+      transition: var(--transition);
+    }
+    .btn-ghost::after {
+      content: ''; position: absolute;
+      bottom: -2px; left: 0;
+      width: 100%; height: 1px;
+      background: var(--text-light);
+    }
+    .btn-ghost:hover { color: var(--text); }
+
+    .hero-image-wrap {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1.2s ease both 0.3s;
+    }
+    .hero-image-wrap img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.6s ease;
+    }
+    .hero-image-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--cream) 0%, transparent 20%);
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem; left: -1.5rem;
+      background: var(--white);
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 4px 30px rgba(43,41,39,0.08);
+      font-size: 0.78rem;
+      z-index: 2;
+    }
+    .hero-badge strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.1rem;
+    }
+    .hero-badge span { color: var(--text-light); }
+
+    /* ─── Boussole Section ───────────────────────────────────────── */
+    #boussole {
+      background: var(--beige);
+      padding: 6rem 0;
+    }
+    .boussole-inner {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+    }
+    .section-title em { font-style: italic; }
+
+    .boussole-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .boussole-card {
+      background: var(--cream);
+      padding: 2rem 1.5rem;
+      position: relative;
+      transition: var(--transition);
+    }
+    .boussole-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(43,41,39,0.07); }
+    .boussole-card .card-num {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--beige-mid);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+    .boussole-card h3 {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .boussole-card p { font-size: 0.83rem; color: var(--text-light); line-height: 1.65; }
+
+    /* ─── Pourquoi consulter ─────────────────────────────────────── */
+    #pourquoi {
+      padding: 7rem 0;
+    }
+    .pourquoi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .pourquoi-text p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+    }
+    .pourquoi-text p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .situations-list { margin-top: 1rem; }
+    .situation-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--beige-mid);
+      transition: var(--transition);
+      cursor: default;
+    }
+    .situation-item:hover { padding-left: 0.5rem; }
+    .situation-item:last-child { border-bottom: none; }
+    .situation-icon {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.6rem;
+    }
+    .situation-item p { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; }
+    .situation-item p strong { color: var(--text); font-weight: 500; font-size: 0.9rem; display: block; margin-bottom: 0.1rem; }
+
+    /* ─── Comment ça se passe ────────────────────────────────────── */
+    #comment {
+      background: var(--beige);
+      padding: 7rem 0;
+    }
+    .comment-header { text-align: center; max-width: 520px; margin: 0 auto 4rem; }
+    .comment-header p { font-size: 0.9rem; color: var(--text-light); margin-top: 1rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .step {
+      background: var(--cream);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: var(--transition);
+    }
+    .step:hover { background: var(--white); }
+    .step-num {
+      font-family: var(--serif);
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--beige-mid);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    .step h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .step p { font-size: 0.85rem; color: var(--text-light); line-height: 1.7; }
+
+    /* ─── Qui suis-je ────────────────────────────────────────────── */
+    #qui-suis-je { padding: 8rem 0; overflow: hidden; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-main {
+      height: 580px;
+      overflow: hidden;
+    }
+    .about-image-main img {
+      height: 100%;
+      object-position: center top;
+      transition: transform 0.7s ease;
+    }
+    .about-image-main:hover img { transform: scale(1.03); }
+
+    .about-image-accent {
+      position: absolute;
+      bottom: -2rem; right: -2rem;
+      width: 180px; height: 220px;
+      overflow: hidden;
+      border: 6px solid var(--cream);
+    }
+    .about-image-accent img { height: 100%; }
+
+    .about-tag {
+      position: absolute;
+      top: 2rem; left: -2rem;
+      background: var(--accent);
+      color: var(--white);
+      padding: 0.9rem 1.2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+    }
+
+    .about-content { padding-left: 1rem; }
+    .about-content .section-label { margin-bottom: 0.5rem; }
+    .about-name {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 3.5vw, 3rem);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
+    }
+    .about-title {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    .about-content p {
+      font-size: 0.92rem;
+      color: var(--text-light);
+      line-height: 1.85;
+      margin-bottom: 1.2rem;
+    }
+    .about-content p strong { color: var(--text); font-weight: 500; }
+
+    .langs {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      margin: 1.5rem 0 2rem;
+    }
+    .lang-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--beige-mid);
+      color: var(--text-light);
+    }
+
+    /* ─── Approche ───────────────────────────────────────────────── */
+    #approche { background: var(--text); color: var(--cream); padding: 7rem 0; }
+    #approche .section-label { color: var(--accent); }
+    #approche .section-title { color: var(--cream); }
+
+    .approche-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      margin-bottom: 4rem;
+    }
+    .approche-intro p {
+      font-size: 0.9rem;
+      color: rgba(250,248,245,0.65);
+      line-height: 1.85;
+      align-self: end;
+    }
+
+    .approche-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(250,248,245,0.08);
+    }
+    .approche-card {
+      background: var(--text);
+      padding: 2.5rem;
+      border: 1px solid rgba(250,248,245,0.06);
+      transition: var(--transition);
+    }
+    .approche-card:hover {
+      background: rgba(250,248,245,0.04);
+    }
+    .approche-card-icon {
+      width: 36px; height: 1px;
+      background: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .approche-card h3 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .approche-card p {
+      font-size: 0.83rem;
+      color: rgba(250,248,245,0.55);
+      line-height: 1.75;
+    }
+
+    /* ─── Tarifs ─────────────────────────────────────────────────── */
+    #tarifs { padding: 7rem 0; }
+    .tarifs-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .tarifs-content p { font-size: 0.9rem; color: var(--text-light); line-height: 1.8; margin-bottom: 1rem; }
+
+    .tarif-box {
+      background: var(--beige);
+      padding: 3rem;
+      text-align: center;
+    }
+    .tarif-price {
+      font-family: var(--serif);
+      font-size: 5rem;
+      font-weight: 300;
+      line-height: 1;
+      margin: 1rem 0 0.25rem;
+    }
+    .tarif-price sup {
+      font-size: 2rem;
+      vertical-align: super;
+      margin-right: 0.2rem;
+    }
+    .tarif-detail { font-size: 0.78rem; color: var(--text-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2rem; }
+    .tarif-features { border-top: 1px solid var(--beige-mid); padding-top: 1.5rem; }
+    .tarif-features li {
+      font-size: 0.84rem;
+      color: var(--text-light);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--beige-mid);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .tarif-features li::before {
+      content: ''; display: block;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--sage);
+      flex-shrink: 0;
+    }
+
+    /* ─── Contact / RDV ──────────────────────────────────────────── */
+    #rdv { background: var(--beige); padding: 7rem 0; }
+    .rdv-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    /* Bandeau contact : intro à gauche, coordonnées à droite */
+    .rdv-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .rdv-info .section-title { margin-bottom: 1.5rem; }
+    .rdv-info p { font-size: 0.9rem; color: var(--text-light); line-height: 1.8; margin-bottom: 2rem; }
+
+    .contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--beige-mid);
+      font-size: 0.88rem;
+    }
+    .contact-item:first-child { border-top: 1px solid var(--beige-mid); }
+    .contact-item-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      width: 80px;
+      flex-shrink: 0;
+    }
+    .contact-item-value { color: var(--text); }
+
+    .rdv-calendar {
+      background: var(--cream);
+      padding: 2.5rem;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+    }
+    .rdv-calendar-icon {
+      width: 56px; height: 56px;
+      border: 1px solid var(--beige-mid);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+    .rdv-calendar h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+    .rdv-calendar p { font-size: 0.82rem; color: var(--text-light); }
+    .rdv-note { font-size: 0.75rem; color: var(--accent); margin-top: 0.5rem; letter-spacing: 0.06em; }
+
+    /* Sélecteur type de RDV (cabinet / visio) */
+    .rdv-types {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 420px;
+      margin: 0.5rem auto 0.25rem;
+    }
+    .rdv-type-btn {
+      flex: 1;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 0.5rem;
+      border: 1px solid var(--beige-mid);
+      background: var(--white);
+      color: var(--text-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .rdv-type-btn:hover { border-color: var(--accent); color: var(--text); }
+    .rdv-type-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+    .rdv-type-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      background: var(--beige);
+      border-color: var(--beige-mid);
+      color: var(--text-light);
+    }
+    .rdv-type-btn:disabled:hover { border-color: var(--beige-mid); color: var(--text-light); }
+    .rdv-type-hint { font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem; }
+
+    /* Bloc agenda pleine largeur */
+    .rdv-booking { width: 100%; }
+    .rdv-booking .rdv-calendar { width: 100%; }
+    .rdv-booking .rdv-calendar > h3,
+    .rdv-booking .rdv-calendar > p { max-width: 560px; }
+    .rdv-booking-frame {
+      width: 100%;
+      min-height: 760px;
+      border: 0;
+      margin-top: 1.5rem;
+      background: var(--cream);
+      display: block;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--text);
+      color: rgba(250,248,245,0.6);
+      padding: 3rem 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--cream);
+    }
+    .footer-logo span { font-style: italic; opacity: 0.6; }
+    .footer-nav { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .footer-nav a {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+    .footer-nav a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.75rem; width: 100%; border-top: 1px solid rgba(250,248,245,0.08); padding-top: 1.5rem; margin-top: 0.5rem; }
+
+    /* ─── Animations ─────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+
+      nav.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--cream);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+      }
+      nav.open a {
+        font-size: 1.1rem;
+        letter-spacing: 0.06em;
+      }
+      .hamburger { z-index: 300; }
+
+      #accueil {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 5rem;
+      }
+      .hero-content { padding: 3rem 2rem; order: 2; }
+      .hero-image-wrap { height: 55vw; min-height: 280px; order: 1; }
+      .hero-image-wrap::after { background: linear-gradient(to bottom, transparent 70%, var(--cream)); }
+      .hero-badge { left: 1rem; bottom: 1rem; }
+
+      .boussole-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .boussole-cards { grid-template-columns: 1fr; }
+
+      .pourquoi-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .steps { grid-template-columns: 1fr; gap: 2px; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-wrap { max-width: 480px; }
+      .about-image-accent { display: none; }
+      .about-tag { display: none; }
+      .about-content { padding-left: 0; }
+
+      .approche-intro { grid-template-columns: 1fr; gap: 1.5rem; }
+      .approche-cards { grid-template-columns: 1fr; }
+
+      .tarifs-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .rdv-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .rdv-contact { grid-template-columns: 1fr; gap: 2rem; }
+      .rdv-booking-frame { min-height: 640px; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 1.25rem; }
+      .hero-title { font-size: 2.4rem; }
+    }
+
+    /* ─── Calendrier custom ──────────────────────────────────────── */
+    .cal-widget {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 1rem;
+    }
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .cal-nav-btn {
+      background: none;
+      border: 1px solid var(--beige-mid);
+      width: 32px; height: 32px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text-light);
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cal-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .cal-month-label {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      margin-bottom: 0.75rem;
+    }
+    .cal-day-header {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      text-align: center;
+      padding: 0.25rem 0;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      cursor: default;
+      border-radius: 2px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .cal-day.available {
+      cursor: pointer;
+      background: var(--beige);
+      color: var(--text);
+      font-weight: 500;
+    }
+    .cal-day.available:hover { background: var(--accent); color: var(--white); }
+    .cal-day.selected { background: var(--text); color: var(--cream); }
+    .cal-day.today { outline: 1px solid var(--accent); }
+    .cal-day.empty { background: none; }
+    .cal-day .cal-dot {
+      position: absolute;
+      bottom: 3px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--sage);
+    }
+    .cal-slots { min-height: 40px; margin-top: 0.5rem; }
+    .cal-slots-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+    .cal-slots-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cal-slot-btn {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 400;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--beige-mid);
+      background: var(--white);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.04em;
+    }
+    .cal-slot-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .cal-slot-btn.booked { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+
+    .cal-form { width: 100%; max-width: 480px; margin-top: 1rem; text-align: left; }
+    .cal-form-recap {
+      font-size: 0.82rem;
+      background: var(--beige);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+      border-left: 2px solid var(--accent);
+    }
+    .cal-form-fields { display: flex; flex-direction: column; gap: 0.6rem; }
+    .cal-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .cal-input {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--beige-mid);
+      background: var(--white);
+      font-family: var(--sans);
+      font-size: 0.83rem;
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+    }
+    .cal-input:focus { border-color: var(--accent); }
+    textarea.cal-input { resize: vertical; min-height: 60px; }
+    .cal-form-actions { display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem; }
+    .cal-back-btn {
+      background: none; border: none;
+      font-size: 0.78rem; color: var(--text-light);
+      cursor: pointer; letter-spacing: 0.04em; padding: 0;
+      transition: var(--transition);
+    }
+    .cal-back-btn:hover { color: var(--text); }
+    .cal-submit-btn { flex: 1; }
+
+    .cal-confirm { text-align: center; padding: 2rem 1rem; }
+    .cal-confirm-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--white);
+      font-size: 1.4rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .cal-confirm h4 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .cal-confirm p { font-size: 0.85rem; color: var(--text-light); }
+
+    /* ─── Admin ──────────────────────────────────────────────────── */
+    #admin-panel { background: var(--cream); padding: 5rem 0; border-top: 1px solid var(--beige-mid); }
+    .admin-inner { display: flex; flex-direction: column; gap: 3rem; }
+    .admin-header {
+      display: flex; align-items: flex-start; flex-wrap: wrap; gap: 1rem;
+      justify-content: space-between;
+    }
+    .admin-logout-btn {
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.5rem 1.2rem; border: 1px solid var(--beige-mid);
+      background: none; color: var(--text-light); cursor: pointer;
+      transition: var(--transition);
+    }
+    .admin-logout-btn:hover { border-color: var(--text); color: var(--text); }
+    .admin-form { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem; }
+    .admin-form .cal-input { width: auto; flex: 1; min-width: 140px; }
+    .admin-slot-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--beige-mid);
+      font-size: 0.85rem; gap: 1rem;
+    }
+    .admin-slot-row:first-child { border-top: 1px solid var(--beige-mid); }
+    .admin-slot-type {
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.6rem; border: 1px solid var(--beige-mid); color: var(--text-light);
+    }
+    .admin-slot-type.cabinet { border-color: var(--sage); color: var(--sage); }
+    .admin-slot-type.visio { border-color: var(--accent); color: var(--accent); }
+    .admin-del-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-light); font-size: 1rem; padding: 0 0.25rem;
+      transition: var(--transition);
+    }
+    .admin-del-btn:hover { color: #c0392b; }
+    .admin-booking-row { padding: 1rem; border-bottom: 1px solid var(--beige-mid); font-size: 0.83rem; }
+    .admin-booking-row:first-child { border-top: 1px solid var(--beige-mid); }
+    .admin-booking-name { font-weight: 500; margin-bottom: 0.2rem; }
+    .admin-booking-detail { color: var(--text-light); font-size: 0.78rem; }
+
+    .admin-modal {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(43,41,39,0.5);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .admin-modal-box {
+      background: var(--cream); padding: 2.5rem;
+      width: 100%; max-width: 360px; position: relative;
+    }
+    .admin-modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; color: var(--text-light);
+    }
+    .admin-error { color: #c0392b; font-size: 0.78rem; margin-top: 0.5rem; }
+    .admin-trigger {
+      font-size: 0.68rem; color: rgba(250,248,245,0.2);
+      cursor: pointer; letter-spacing: 0.08em; transition: var(--transition);
+    }
+    .admin-trigger:hover { color: rgba(250,248,245,0.5); }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────── -->
+  <header id="header">
+    <a href="#accueil" class="logo">Elisa de Bussy <span>Psychopraticienne &amp; thérapeute</span></a>
+    <nav id="main-nav">
+      <a href="#accueil">Accueil</a>
+      <a href="#qui-suis-je">Qui suis-je</a>
+      <a href="#approche">Mon approche</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#rdv" class="nav-cta">Prendre RDV</a>
+    </nav>
+    <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <!-- ─── HERO / ACCUEIL ──────────────────────────────────────────── -->
+  <section id="accueil">
+    <div class="hero-content">
+      <div class="hero-label">Psychopraticienne &amp; thérapeute</div>
+      <h1 class="hero-title">
+        Retrouver<br>l'<em>apaisement</em><br>et du sens
+      </h1>
+      <p class="hero-subtitle">Thérapie individuelle · Adulte &amp; Jeune adulte</p>
+      <p class="hero-location">Cabinet à Mérignac &amp; Téléconsultation</p>
+      <div class="hero-actions">
+        <a href="#rdv" class="btn-primary">Prendre rendez-vous</a>
+      </div>
+    </div>
+
+    <div class="hero-image-wrap">
+      <!-- Photo portrait cozy & naturelle -->
+      <img
+        src="hero.png"
+        alt="Elisa de Bussy, psychopraticienne"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- ─── MA BOUSSOLE ──────────────────────────────────────────────── -->
+  <section id="boussole">
+    <div class="container">
+      <div class="boussole-inner">
+        <div class="reveal">
+          <p class="section-label">Ma boussole</p>
+          <h2 class="section-title">Ce qui <em>guide</em><br>chaque séance</h2>
+        </div>
+        <div class="boussole-cards reveal">
+          <div class="boussole-card">
+            <h3>Alliance thérapeutique</h3>
+            <p>Une relation chaleureuse, égalitaire et sans jugement.</p>
+          </div>
+          <div class="boussole-card">
+            <h3>Approche intégrative et holistique</h3>
+            <p>Comprendre en profondeur, ressentir pleinement, agir concrètement.</p>
+          </div>
+          <div class="boussole-card">
+            <h3>Cadre sécurisant</h3>
+            <p>Un espace clair, ajusté à votre rythme et à vos objectifs, où vous restez acteur de votre suivi.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── POURQUOI CONSULTER ───────────────────────────────────────── -->
+  <section id="pourquoi">
+    <div class="container">
+      <div class="pourquoi-grid">
+        <div class="reveal">
+          <p class="section-label">Pourquoi consulter</p>
+          <h2 class="section-title" style="margin-bottom:1.5rem;">Un espace<br>pour <em>s'explorer</em></h2>
+          <p style="font-size:0.95rem;color:var(--text-light);line-height:1.85;">
+            Consulter un psychologue, c'est s'offrir un espace sécurisant pour explorer ses pensées et ses émotions, apaiser ses souffrances et retrouver un sens à sa vie.
+          </p>
+          <p style="font-size:0.95rem;color:var(--text-light);line-height:1.85;margin-top:1rem;">
+            La thérapie offre une écoute neutre et bienveillante, et permet de clarifier ses besoins, ses limites et ses valeurs, afin de faire des choix plus en accord avec soi-même.
+          </p>
+          <a href="#rdv" class="btn-primary" style="margin-top:2rem;display:inline-block;">Commencer</a>
+        </div>
+
+        <div class="situations-list reveal">
+          <p class="section-label" style="margin-bottom:1rem;">Quand envisager un accompagnement ?</p>
+          <ul>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Épreuves de vie</strong>Deuil, séparation, perte d'emploi, transition importante.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Conflits et tensions</strong>Au sein du couple, de la famille, au travail.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Répétitions difficiles</strong>Schémas relationnels récurrents, blocages persistants.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Mal-être durable</strong>Troubles du sommeil, idées sombres, conduites addictives.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Surcharge émotionnelle</strong>Difficulté à dire non, épuisement professionnel.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Perte de repères</strong>Sentiment de vide, doutes sur sa valeur personnelle.</p>
+            </li>
+            <li class="situation-item">
+              <div class="situation-icon"></div>
+              <p><strong>Émotions débordantes</strong>Ruminations, irritabilité, réactions disproportionnées.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COMMENT ÇA SE PASSE ─────────────────────────────────────── -->
+  <section id="comment">
+    <div class="container">
+      <div class="comment-header reveal">
+        <p class="section-label">Le déroulé</p>
+        <h2 class="section-title">Comment <em>ça se passe ?</em></h2>
+        <p>Un processus simple, pensé pour vous mettre à l'aise dès le premier instant.</p>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Prendre rendez-vous</h3>
+          <p>Prenez rendez-vous directement en ligne, par téléphone ou par email. Choisissez dès la réservation si vous préférez une consultation en visio ou au cabinet à Mérignac.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Faire connaissance</h3>
+          <p>Lors de la première séance (50–60 min), vous posez vos besoins, votre contexte, vos attentes. J'évalue la meilleure façon de vous accompagner : si une autre prise en charge semble plus adaptée, je vous réoriente si nécessaire.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Avancer à votre rythme</h3>
+          <p>Nous définissons ensemble vos objectifs et la fréquence des séances. Vous restez acteur de votre suivi : vous pouvez ajuster, mettre en pause si nécessaire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── QUI SUIS-JE ──────────────────────────────────────────────── -->
+  <section id="qui-suis-je">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap reveal">
+          <div class="about-image-main">
+            <img
+              src="portrait.png"
+              alt="Elisa de Bussy, psychopraticienne"
+            />
+          </div>
+          <div class="about-image-accent">
+            <img
+              src="accent.png"
+              alt="Elisa de Bussy"
+            />
+          </div>
+          <div class="about-tag">Psychopraticienne</div>
+        </div>
+
+        <div class="about-content reveal">
+          <p class="section-label">Qui suis-je</p>
+          <h2 class="about-name">Elisa de Bussy</h2>
+          <p class="about-title">Psychopraticienne &amp; thérapeute</p>
+
+          <p>
+            J'ai suivi une formation de psychologue clinicienne dans un contexte multiculturel. Après avoir obtenu une licence en psychologie à l'université de Rennes, j'ai poursuivi un Master en Psychologie Clinique et de la Santé à l'Université Egas Moniz, à Lisbonne. Mes stages m'ont conduite à me centrer sur l'accompagnement des adultes, avec une pratique intégrative.
+          </p>
+          <p>
+            Avant de me dévouer à la psychologie, j'ai évolué pendant 5 ans dans l'univers du marketing digital. En 2020, animée par le besoin de placer l'humain et l'écoute authentique au cœur de mon quotidien, j'ai initié ma reconversion vers la Psychologie.
+          </p>
+          <p>
+            Mon histoire s'est enrichie à l'étranger : un an en Australie, sept ans au Portugal. Ces années m'ont permis de développer une fine sensibilité interculturelle : vous accueillir dans le respect absolu de votre singularité, de vos racines et de vos codes.
+          </p>
+
+          <div class="langs">
+            <span class="lang-tag">Français</span>
+            <span class="lang-tag">English</span>
+            <span class="lang-tag">Português</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── APPROCHE ─────────────────────────────────────────────────── -->
+  <section id="approche">
+    <div class="container">
+      <div class="approche-intro reveal">
+        <div>
+          <p class="section-label">Mon approche</p>
+          <h2 class="section-title" style="color:var(--cream);">Une thérapie<br><em>sur mesure</em></h2>
+        </div>
+        <p>
+          J'utilise une approche intégrative. Ici, la thérapie est réellement sur mesure : nous ne déroulons pas un protocole tout fait, nous construisons ensemble ce qui vous convient. Je puise dans plusieurs courants validés de la psychologie pour bâtir, avec vous, une prise en charge adaptée à votre histoire, votre rythme et vos objectifs.
+        </p>
+      </div>
+
+      <div class="approche-cards reveal">
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>La TCC (Thérapie Cognitive et Comportementale)</h3>
+          <p>Les TCC permettent de repérer les pensées et comportements qui entretiennent votre souffrance pour expérimenter, pas à pas, des alternatives plus aidantes (exercices concrets, psychoéducation). J'y associe la thérapie des schémas pour identifier et apaiser les blocages profonds issus du passé (peur de l'abandon, exigences élevées, dévalorisation) afin de nourrir enfin vos besoins fondamentaux.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>L'Approche Humaniste</h3>
+          <p>Cette approche vous place au centre de la thérapie. Dans un cadre authentique et sans jugement, elle part du principe que vous possédez déjà les ressources pour grandir. Ensemble, nous travaillons sur l'écoute de vos besoins, l'acceptation de soi et l'autonomie, pour vous aider à vivre de manière plus douce et alignée avec vos valeurs.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>L'Analyse Psychodynamique</h3>
+          <p>Elle explore la manière dont votre histoire et vos mécanismes inconscients se rejouent dans le présent (schémas relationnels répétitifs, conflits internes, blocages professionnels). Mettre des mots sur ces processus permet de comprendre vos répétitions et de vous en libérer, à votre rythme, grâce à une relation thérapeutique sécurisante.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>La TCE (Thérapie Centrée sur les Émotions)</h3>
+          <p>Ici, les émotions ne sont pas des obstacles, mais des guides. Nous apprenons à les accueillir, les réguler et les transformer pour qu'elles deviennent de véritables ressources. En séance, ce travail vous aide à quitter les réactions automatiques pour retrouver une sécurité intérieure et des choix alignés.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TARIFS ───────────────────────────────────────────────────── -->
+  <section id="tarifs">
+    <div class="container">
+      <div class="tarifs-inner">
+        <div class="reveal">
+          <p class="section-label">Tarifs</p>
+          <h2 class="section-title" style="margin-bottom:1.5rem;">Un cadre clair<br>et <em>transparent</em></h2>
+          <p>Je vous reçois <strong>en cabinet les lundi et mardi</strong> et en visio le reste de la semaine.</p>
+          <p>Chaque séance dure entre <strong>50 et 60 minutes</strong>. Les rendez-vous sont annulables <strong>24h à l'avance</strong>.</p>
+          <p style="color:var(--accent);font-size:0.83rem;margin-top:0.5rem;">Carte bleue non acceptée.</p>
+        </div>
+
+        <div class="tarif-box reveal">
+          <p class="section-label" style="text-align:center;">Consultation individuelle</p>
+          <div class="tarif-price"><sup>€</sup>60</div>
+          <p class="tarif-detail">par séance · 50 à 60 min</p>
+          <ul class="tarif-features">
+            <li>Cabinet à Mérignac (lundi &amp; mardi)</li>
+            <li>Téléconsultation (mercredi au vendredi)</li>
+            <li>Adulte &amp; Jeune adulte</li>
+            <li>Consultation en FR, EN ou PT</li>
+            <li>Annulation gratuite jusqu'à 24h avant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRENDRE RDV ──────────────────────────────────────────────── -->
+  <section id="rdv">
+    <div class="container">
+      <div class="rdv-inner">
+        <div class="rdv-contact reveal">
+          <div class="rdv-info">
+            <p class="section-label">Contact &amp; Rendez-vous</p>
+            <h2 class="section-title" style="margin-bottom:1rem;">Prenons <em>contact</em></h2>
+            <p>Vous pouvez me contacter par téléphone ou email, ou directement réserver un créneau en ligne dans mon agenda.</p>
+          </div>
+
+          <ul class="contact-list">
+            <li class="contact-item">
+              <span class="contact-item-label">Téléphone</span>
+              <a href="tel:0670936138" class="contact-item-value">06 70 93 61 38</a>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-label">Email</span>
+              <a href="mailto:edebussy.psy@gmail.com" class="contact-item-value">edebussy.psy@gmail.com</a>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-label">Cabinet</span>
+              <span class="contact-item-value">25bis avenue du Bédat, 33700 - Mérignac</span>
+            </li>
+            <li class="contact-item">
+              <span class="contact-item-label">Jours</span>
+              <span class="contact-item-value">Lundi &amp; Mardi en cabinet · Visio le reste de la semaine</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="rdv-booking reveal">
+          <div class="rdv-calendar" id="rdv-calendar">
+            <div class="rdv-calendar-icon">📅</div>
+            <h3>Réserver en ligne</h3>
+            <p>Choisissez votre créneau — confirmation par email immédiate.</p>
+
+            <div class="rdv-types" id="rdv-types">
+              <button type="button" class="rdv-type-btn active" data-type="cabinet">Au cabinet</button>
+              <button type="button" class="rdv-type-btn" data-type="visio">Visio</button>
+            </div>
+
+            <div class="cal-widget" id="cal-widget">
+              <div class="cal-nav">
+                <button class="cal-nav-btn" id="cal-prev">&#8249;</button>
+                <span class="cal-month-label" id="cal-month-label"></span>
+                <button class="cal-nav-btn" id="cal-next">&#8250;</button>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+              <div class="cal-slots" id="cal-slots"></div>
+            </div>
+
+            <div class="cal-form" id="cal-form" style="display:none;">
+              <div class="cal-form-recap" id="cal-form-recap"></div>
+              <div class="cal-form-fields">
+                <div class="cal-input-row">
+                  <input class="cal-input" id="f-prenom" type="text" placeholder="Prénom *" required />
+                  <input class="cal-input" id="f-nom" type="text" placeholder="Nom *" required />
+                </div>
+                <input class="cal-input" id="f-email" type="email" placeholder="Email *" required />
+                <input class="cal-input" id="f-tel" type="tel" placeholder="Téléphone *" required />
+                <textarea class="cal-input" id="f-message" placeholder="Message (facultatif)" rows="2"></textarea>
+                <div class="cal-form-actions">
+                  <button class="cal-back-btn" id="cal-back-btn" type="button">← Modifier</button>
+                  <button class="btn-primary cal-submit-btn" id="cal-submit-btn" type="button">Confirmer le rendez-vous</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="cal-confirm" id="cal-confirm" style="display:none;">
+              <div class="cal-confirm-icon">✓</div>
+              <h4>Rendez-vous confirmé !</h4>
+              <p id="cal-confirm-text"></p>
+              <p class="rdv-note" style="margin-top:0.5rem;">Un email de confirmation vous a été envoyé.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ADMIN ──────────────────────────────────────────────────────── -->
+  <section id="admin-panel" style="display:none;">
+    <div class="container">
+      <div class="admin-inner">
+        <div class="admin-header">
+          <h2 class="section-title" style="margin-bottom:0.25rem;">Espace <em>Admin</em></h2>
+          <button class="admin-logout-btn" id="admin-logout">Déconnexion</button>
+        </div>
+        <div class="admin-add-slot">
+          <p class="section-label">Ajouter un créneau</p>
+          <div class="admin-form">
+            <input class="cal-input" type="date" id="admin-date" />
+            <input class="cal-input" type="time" id="admin-time" step="1800" />
+            <div class="rdv-types" style="max-width:260px;margin:0;">
+              <button type="button" class="rdv-type-btn active" data-type="cabinet" id="admin-type-cabinet">Cabinet</button>
+              <button type="button" class="rdv-type-btn" data-type="visio" id="admin-type-visio">Visio</button>
+            </div>
+            <button class="btn-primary" id="admin-add-btn" type="button">+ Ajouter</button>
+          </div>
+        </div>
+        <div>
+          <p class="section-label">Créneaux à venir</p>
+          <div id="admin-slots-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
+        </div>
+        <div>
+          <p class="section-label">Réservations</p>
+          <div id="admin-bookings-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="admin-modal" id="admin-modal" style="display:none;">
+    <div class="admin-modal-box">
+      <p class="section-label" style="margin-bottom:0.75rem;">Accès admin</p>
+      <input class="cal-input" type="password" id="admin-pwd" placeholder="Mot de passe" />
+      <button class="btn-primary" id="admin-login-btn" type="button" style="margin-top:1rem;width:100%;">Connexion</button>
+      <p class="admin-error" id="admin-error" style="display:none;">Mot de passe incorrect.</p>
+      <button class="admin-modal-close" id="admin-modal-close">✕</button>
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">Elisa de Bussy <span>· Psychopraticienne &amp; thérapeute</span></div>
+        <nav class="footer-nav">
+          <a href="#accueil">Accueil</a>
+          <a href="#qui-suis-je">Qui suis-je</a>
+          <a href="#approche">Approche</a>
+          <a href="#tarifs">Tarifs</a>
+          <a href="#rdv">Contact</a>
+        </nav>
+        <p class="footer-copy">© 2025 Elisa de Bussy — Psychopraticienne &amp; thérapeute · Mérignac &amp; Téléconsultation</p>
+        <span class="admin-trigger" id="admin-trigger">admin</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SCRIPTS ──────────────────────────────────────────────────── -->
+  <script>
+    /* ─── Config API ─────────────────────────────────────────────────
+       Remplace par ton URL Vercel après déploiement.              */
+    const API_BASE = "https://elisa-psy-site.vercel.app";
+
+    /* ─── Sticky header ─────────────────────────────────────────── */
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ─── Hamburger ─────────────────────────────────────────────── */
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('main-nav');
+    hamburger.addEventListener('click', () => nav.classList.toggle('open'));
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+
+    /* ─── Scroll reveal ─────────────────────────────────────────── */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    /* ═══════════════════════════════════════════════════════════════
+       CALENDRIER PATIENT
+    ═══════════════════════════════════════════════════════════════ */
+    (function initCalendar() {
+      let currentType  = 'cabinet';
+      let currentYear  = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+      let selectedDate = null;
+      let selectedSlot = null;
+      let allSlots     = [];
+
+      const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
+                         'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+      const DAYS_FR   = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
+
+      const typeButtons  = document.querySelectorAll('#rdv-types .rdv-type-btn');
+      const calGrid      = document.getElementById('cal-grid');
+      const calMonthLbl  = document.getElementById('cal-month-label');
+      const calSlots     = document.getElementById('cal-slots');
+      const calWidget    = document.getElementById('cal-widget');
+      const calForm      = document.getElementById('cal-form');
+      const calFormRecap = document.getElementById('cal-form-recap');
+      const calConfirm   = document.getElementById('cal-confirm');
+      const calConfirmTxt= document.getElementById('cal-confirm-text');
+      const calBackBtn   = document.getElementById('cal-back-btn');
+      const calSubmitBtn = document.getElementById('cal-submit-btn');
+
+      async function loadSlots() {
+        try {
+          const res = await fetch(`${API_BASE}/api/slots`);
+          allSlots = await res.json();
+        } catch(e) { allSlots = []; }
+        renderCalendar();
+      }
+
+      function slotsForMonth(year, month) {
+        return allSlots.filter(s => {
+          const d = new Date(s.datetime);
+          return d.getFullYear() === year && d.getMonth() === month && s.type === currentType && !s.booked;
+        });
+      }
+
+      function slotsForDate(dateStr) {
+        return allSlots.filter(s => {
+          const d = new Date(s.datetime);
+          return d.toISOString().slice(0,10) === dateStr && s.type === currentType;
+        });
+      }
+
+      function renderCalendar() {
+        calMonthLbl.textContent = `${MONTHS_FR[currentMonth]} ${currentYear}`;
+        calGrid.innerHTML = '';
+        DAYS_FR.forEach(d => {
+          const h = document.createElement('div');
+          h.className = 'cal-day-header';
+          h.textContent = d;
+          calGrid.appendChild(h);
+        });
+
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        let startOffset = firstDay.getDay() - 1;
+        if (startOffset < 0) startOffset = 6;
+
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const availableDates = new Set(
+          slotsForMonth(currentYear, currentMonth).map(s => new Date(s.datetime).toISOString().slice(0,10))
+        );
+        const today = new Date(); today.setHours(0,0,0,0);
+
+        for (let i = 0; i < startOffset; i++) {
+          const e = document.createElement('div');
+          e.className = 'cal-day empty';
+          calGrid.appendChild(e);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const cell = document.createElement('div');
+          cell.className = 'cal-day';
+          cell.textContent = d;
+          const thisDate = new Date(currentYear, currentMonth, d);
+          const dateStr  = thisDate.toISOString().slice(0,10);
+
+          if (thisDate < today) {
+            cell.style.opacity = '0.3';
+          } else if (availableDates.has(dateStr)) {
+            cell.classList.add('available');
+            const dot = document.createElement('span');
+            dot.className = 'cal-dot';
+            cell.appendChild(dot);
+            if (selectedDate === dateStr) cell.classList.add('selected');
+            cell.addEventListener('click', () => selectDate(dateStr));
+          }
+          if (dateStr === today.toISOString().slice(0,10)) cell.classList.add('today');
+          calGrid.appendChild(cell);
+        }
+        if (selectedDate) renderSlots(selectedDate);
+      }
+
+      function selectDate(dateStr) {
+        selectedDate = dateStr;
+        selectedSlot = null;
+        renderCalendar();
+        renderSlots(dateStr);
+      }
+
+      function renderSlots(dateStr) {
+        const slots = slotsForDate(dateStr);
+        if (!slots.length) { calSlots.innerHTML = ''; return; }
+        const d = new Date(dateStr + 'T00:00:00');
+        const label = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+        let html = `<p class="cal-slots-title">Créneaux — ${label}</p><div class="cal-slots-grid">`;
+        slots.forEach(s => {
+          const time = new Date(s.datetime).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+          html += `<button class="cal-slot-btn${s.booked?' booked':''}" data-id="${s.id}" ${s.booked?'disabled':''}>${time}</button>`;
+        });
+        html += '</div>';
+        calSlots.innerHTML = html;
+        calSlots.querySelectorAll('.cal-slot-btn:not(.booked)').forEach(btn => {
+          btn.addEventListener('click', () => openForm(btn.dataset.id));
+        });
+      }
+
+      function openForm(slotId) {
+        selectedSlot = allSlots.find(s => s.id === slotId);
+        if (!selectedSlot) return;
+        const d  = new Date(selectedSlot.datetime);
+        const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+        const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+        calFormRecap.innerHTML = `<strong>${ds} à ${ts}</strong> — ${selectedSlot.type === 'cabinet' ? 'Au cabinet · Mérignac' : 'Téléconsultation'}`;
+        calWidget.style.display = 'none';
+        calForm.style.display   = 'block';
+      }
+
+      calBackBtn.addEventListener('click', () => {
+        calForm.style.display   = 'none';
+        calWidget.style.display = 'block';
+      });
+
+      calSubmitBtn.addEventListener('click', async () => {
+        const prenom  = document.getElementById('f-prenom').value.trim();
+        const nom     = document.getElementById('f-nom').value.trim();
+        const email   = document.getElementById('f-email').value.trim();
+        const tel     = document.getElementById('f-tel').value.trim();
+        const message = document.getElementById('f-message').value.trim();
+        if (!prenom || !nom || !email || !tel) { alert('Merci de remplir tous les champs obligatoires (*).'); return; }
+        calSubmitBtn.textContent = 'Envoi…';
+        calSubmitBtn.disabled = true;
+        try {
+          const res = await fetch(`${API_BASE}/api/book`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slotId: selectedSlot.id, prenom, nom, email, tel, message })
+          });
+          if (!res.ok) throw new Error();
+          const d  = new Date(selectedSlot.datetime);
+          const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+          const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+          calConfirmTxt.textContent = `${ds} à ${ts} — ${prenom} ${nom}`;
+          calForm.style.display    = 'none';
+          calConfirm.style.display = 'block';
+          loadSlots();
+        } catch(e) {
+          alert('Une erreur est survenue. Merci de réessayer ou de me contacter directement.');
+          calSubmitBtn.textContent = 'Confirmer le rendez-vous';
+          calSubmitBtn.disabled = false;
+        }
+      });
+
+      document.getElementById('cal-prev').addEventListener('click', () => {
+        if (currentMonth === 0) { currentMonth = 11; currentYear--; } else currentMonth--;
+        selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
+      });
+      document.getElementById('cal-next').addEventListener('click', () => {
+        if (currentMonth === 11) { currentMonth = 0; currentYear++; } else currentMonth++;
+        selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
+      });
+
+      typeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          typeButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentType = btn.dataset.type;
+          selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
+        });
+      });
+
+      loadSlots();
+    })();
+
+    /* ═══════════════════════════════════════════════════════════════
+       ADMIN PANEL
+    ═══════════════════════════════════════════════════════════════ */
+    (function initAdmin() {
+      const ADMIN_PWD = "elisa2025"; // ← change ce mot de passe !
+
+      const trigger     = document.getElementById('admin-trigger');
+      const modal       = document.getElementById('admin-modal');
+      const modalClose  = document.getElementById('admin-modal-close');
+      const loginBtn    = document.getElementById('admin-login-btn');
+      const pwdInput    = document.getElementById('admin-pwd');
+      const errorMsg    = document.getElementById('admin-error');
+      const panel       = document.getElementById('admin-panel');
+      const logoutBtn   = document.getElementById('admin-logout');
+      const addBtn      = document.getElementById('admin-add-btn');
+      const adminDate   = document.getElementById('admin-date');
+      const adminTime   = document.getElementById('admin-time');
+      const slotsBox    = document.getElementById('admin-slots-container');
+      const bookingsBox = document.getElementById('admin-bookings-container');
+
+      let adminType  = 'cabinet';
+      let adminToken = sessionStorage.getItem('admin_token') || null;
+      if (adminToken) showPanel();
+
+      document.querySelectorAll('#admin-panel .rdv-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#admin-panel .rdv-type-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          adminType = btn.dataset.type;
+        });
+      });
+
+      trigger.addEventListener('click', () => {
+        if (adminToken) { showPanel(); return; }
+        modal.style.display = 'flex';
+        pwdInput.value = ''; errorMsg.style.display = 'none';
+        setTimeout(() => pwdInput.focus(), 100);
+      });
+      modalClose.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+      loginBtn.addEventListener('click', () => {
+        if (pwdInput.value === ADMIN_PWD) {
+          adminToken = btoa(Date.now());
+          sessionStorage.setItem('admin_token', adminToken);
+          modal.style.display = 'none';
+          showPanel();
+        } else {
+          errorMsg.style.display = 'block';
+          pwdInput.value = ''; pwdInput.focus();
+        }
+      });
+      pwdInput.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
+
+      logoutBtn.addEventListener('click', () => {
+        adminToken = null;
+        sessionStorage.removeItem('admin_token');
+        panel.style.display = 'none';
+      });
+
+      function showPanel() {
+        panel.style.display = 'block';
+        panel.scrollIntoView({ behavior:'smooth', block:'start' });
+        loadAdminData();
+      }
+
+      async function loadAdminData() {
+        slotsBox.innerHTML    = '<p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>';
+        bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>';
+        try {
+          const [slotsRes, bookingsRes] = await Promise.all([
+            fetch(`${API_BASE}/api/slots?all=true&token=${adminToken}`),
+            fetch(`${API_BASE}/api/bookings?token=${adminToken}`)
+          ]);
+          renderAdminSlots(await slotsRes.json());
+          renderAdminBookings(await bookingsRes.json());
+        } catch(e) {
+          slotsBox.innerHTML = bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Erreur de chargement.</p>';
+        }
+      }
+
+      function renderAdminSlots(slots) {
+        const future = slots.filter(s => new Date(s.datetime) >= new Date())
+          .sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+        if (!future.length) { slotsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucun créneau à venir.</p>'; return; }
+        slotsBox.innerHTML = future.map(s => {
+          const d  = new Date(s.datetime);
+          const ds = d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'short' });
+          const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+          return `<div class="admin-slot-row">
+            <span>${ds} à ${ts}</span>
+            <span class="admin-slot-type ${s.type}">${s.type === 'cabinet' ? 'Cabinet' : 'Visio'}</span>
+            <span style="font-size:0.78rem;color:${s.booked ? '#c0392b' : 'var(--sage)'};">${s.booked ? 'Réservé' : 'Libre'}</span>
+            <button class="admin-del-btn" data-id="${s.id}" title="Supprimer">✕</button>
+          </div>`;
+        }).join('');
+        slotsBox.querySelectorAll('.admin-del-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (!confirm('Supprimer ce créneau ?')) return;
+            await fetch(`${API_BASE}/api/slots/${btn.dataset.id}?token=${adminToken}`, { method:'DELETE' });
+            loadAdminData();
+          });
+        });
+      }
+
+      function renderAdminBookings(bookings) {
+        const sorted = [...bookings].sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+        if (!sorted.length) { bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucune réservation.</p>'; return; }
+        bookingsBox.innerHTML = sorted.map(b => {
+          const d  = new Date(b.datetime);
+          const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+          const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+          return `<div class="admin-booking-row">
+            <div class="admin-booking-name">${b.prenom} ${b.nom}</div>
+            <div class="admin-booking-detail">${ds} à ${ts} · ${b.type === 'cabinet' ? 'Cabinet' : 'Visio'}</div>
+            <div class="admin-booking-detail">${b.email} · ${b.tel}</div>
+            ${b.message ? `<div class="admin-booking-detail" style="font-style:italic;">"${b.message}"</div>` : ''}
+          </div>`;
+        }).join('');
+      }
+
+      addBtn.addEventListener('click', async () => {
+        const date = adminDate.value, time = adminTime.value;
+        if (!date || !time) { alert('Merci de choisir une date et une heure.'); return; }
+        const datetime = new Date(`${date}T${time}:00`).toISOString();
+        addBtn.textContent = '…'; addBtn.disabled = true;
+        try {
+          await fetch(`${API_BASE}/api/slots`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ datetime, type: adminType, token: adminToken })
+          });
+          adminDate.value = ''; adminTime.value = '';
+          loadAdminData();
+        } catch(e) { alert("Erreur lors de l'ajout."); }
+        addBtn.textContent = '+ Ajouter'; addBtn.disabled = false;
+      });
+    })();
+  </script>
+</body>
+</html>
