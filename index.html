@@ -864,10 +864,7 @@
       border-radius: 50%;
       background: var(--sage);
     }
-    .cal-slots {
-      min-height: 40px;
-      margin-top: 0.5rem;
-    }
+    .cal-slots { min-height: 40px; margin-top: 0.5rem; }
     .cal-slots-title {
       font-size: 0.7rem;
       letter-spacing: 0.1em;
@@ -875,11 +872,7 @@
       color: var(--text-light);
       margin-bottom: 0.5rem;
     }
-    .cal-slots-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    .cal-slots-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cal-slot-btn {
       font-family: var(--sans);
       font-size: 0.78rem;
@@ -893,13 +886,8 @@
       letter-spacing: 0.04em;
     }
     .cal-slot-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .cal-slot-btn.booked {
-      opacity: 0.35;
-      cursor: not-allowed;
-      text-decoration: line-through;
-    }
+    .cal-slot-btn.booked { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
 
-    /* Formulaire réservation */
     .cal-form { width: 100%; max-width: 480px; margin-top: 1rem; text-align: left; }
     .cal-form-recap {
       font-size: 0.82rem;
@@ -928,14 +916,12 @@
     .cal-back-btn {
       background: none; border: none;
       font-size: 0.78rem; color: var(--text-light);
-      cursor: pointer; letter-spacing: 0.04em;
-      padding: 0;
+      cursor: pointer; letter-spacing: 0.04em; padding: 0;
       transition: var(--transition);
     }
     .cal-back-btn:hover { color: var(--text); }
     .cal-submit-btn { flex: 1; }
 
-    /* Confirmation */
     .cal-confirm { text-align: center; padding: 2rem 1rem; }
     .cal-confirm-icon {
       width: 52px; height: 52px;
@@ -968,25 +954,18 @@
       transition: var(--transition);
     }
     .admin-logout-btn:hover { border-color: var(--text); color: var(--text); }
-    .admin-form {
-      display: flex; flex-wrap: wrap; gap: 0.75rem;
-      align-items: center; margin-top: 1rem;
-    }
+    .admin-form { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem; }
     .admin-form .cal-input { width: auto; flex: 1; min-width: 140px; }
-    .admin-slots-list, .admin-bookings-list { margin-top: 0; }
     .admin-slot-row {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.75rem 1rem;
       border-bottom: 1px solid var(--beige-mid);
-      font-size: 0.85rem;
-      gap: 1rem;
+      font-size: 0.85rem; gap: 1rem;
     }
     .admin-slot-row:first-child { border-top: 1px solid var(--beige-mid); }
     .admin-slot-type {
       font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border: 1px solid var(--beige-mid);
-      color: var(--text-light);
+      padding: 0.2rem 0.6rem; border: 1px solid var(--beige-mid); color: var(--text-light);
     }
     .admin-slot-type.cabinet { border-color: var(--sage); color: var(--sage); }
     .admin-slot-type.visio { border-color: var(--accent); color: var(--accent); }
@@ -996,26 +975,19 @@
       transition: var(--transition);
     }
     .admin-del-btn:hover { color: #c0392b; }
-    .admin-booking-row {
-      padding: 1rem;
-      border-bottom: 1px solid var(--beige-mid);
-      font-size: 0.83rem;
-    }
+    .admin-booking-row { padding: 1rem; border-bottom: 1px solid var(--beige-mid); font-size: 0.83rem; }
     .admin-booking-row:first-child { border-top: 1px solid var(--beige-mid); }
     .admin-booking-name { font-weight: 500; margin-bottom: 0.2rem; }
     .admin-booking-detail { color: var(--text-light); font-size: 0.78rem; }
 
-    /* Modal login */
     .admin-modal {
       position: fixed; inset: 0; z-index: 500;
       background: rgba(43,41,39,0.5);
       display: flex; align-items: center; justify-content: center;
     }
     .admin-modal-box {
-      background: var(--cream);
-      padding: 2.5rem;
-      width: 100%; max-width: 360px;
-      position: relative;
+      background: var(--cream); padding: 2.5rem;
+      width: 100%; max-width: 360px; position: relative;
     }
     .admin-modal-close {
       position: absolute; top: 1rem; right: 1rem;
@@ -1023,12 +995,9 @@
       font-size: 1rem; color: var(--text-light);
     }
     .admin-error { color: #c0392b; font-size: 0.78rem; margin-top: 0.5rem; }
-
-    /* Lien admin discret dans le footer */
     .admin-trigger {
       font-size: 0.68rem; color: rgba(250,248,245,0.2);
-      cursor: pointer; letter-spacing: 0.08em;
-      transition: var(--transition);
+      cursor: pointer; letter-spacing: 0.08em; transition: var(--transition);
     }
     .admin-trigger:hover { color: rgba(250,248,245,0.5); }
   </style>
@@ -1330,27 +1299,21 @@
             <h3>Réserver en ligne</h3>
             <p>Choisissez votre créneau — confirmation par email immédiate.</p>
 
-            <!-- Sélecteur type -->
             <div class="rdv-types" id="rdv-types">
               <button type="button" class="rdv-type-btn active" data-type="cabinet">Au cabinet</button>
               <button type="button" class="rdv-type-btn" data-type="visio">Visio</button>
             </div>
 
-            <!-- Calendrier custom -->
             <div class="cal-widget" id="cal-widget">
-              <!-- Navigation mois -->
               <div class="cal-nav">
                 <button class="cal-nav-btn" id="cal-prev">&#8249;</button>
                 <span class="cal-month-label" id="cal-month-label"></span>
                 <button class="cal-nav-btn" id="cal-next">&#8250;</button>
               </div>
-              <!-- Grille jours -->
               <div class="cal-grid" id="cal-grid"></div>
-              <!-- Créneaux du jour sélectionné -->
               <div class="cal-slots" id="cal-slots"></div>
             </div>
 
-            <!-- Formulaire patient (apparaît après sélection créneau) -->
             <div class="cal-form" id="cal-form" style="display:none;">
               <div class="cal-form-recap" id="cal-form-recap"></div>
               <div class="cal-form-fields">
@@ -1368,7 +1331,6 @@
               </div>
             </div>
 
-            <!-- Confirmation -->
             <div class="cal-confirm" id="cal-confirm" style="display:none;">
               <div class="cal-confirm-icon">✓</div>
               <h4>Rendez-vous confirmé !</h4>
@@ -1387,12 +1349,9 @@
       <div class="admin-inner">
         <div class="admin-header">
           <h2 class="section-title" style="margin-bottom:0.25rem;">Espace <em>Admin</em></h2>
-          <p style="font-size:0.85rem;color:var(--text-light);">Gérez vos créneaux de consultation</p>
           <button class="admin-logout-btn" id="admin-logout">Déconnexion</button>
         </div>
-
-        <!-- Ajouter un créneau -->
-        <div class="admin-add-slot reveal">
+        <div class="admin-add-slot">
           <p class="section-label">Ajouter un créneau</p>
           <div class="admin-form">
             <input class="cal-input" type="date" id="admin-date" />
@@ -1404,27 +1363,18 @@
             <button class="btn-primary" id="admin-add-btn" type="button">+ Ajouter</button>
           </div>
         </div>
-
-        <!-- Liste des créneaux -->
-        <div class="admin-slots-list reveal">
+        <div>
           <p class="section-label">Créneaux à venir</p>
-          <div id="admin-slots-container">
-            <p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>
-          </div>
+          <div id="admin-slots-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
         </div>
-
-        <!-- Réservations reçues -->
-        <div class="admin-bookings-list reveal">
+        <div>
           <p class="section-label">Réservations</p>
-          <div id="admin-bookings-container">
-            <p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>
-          </div>
+          <div id="admin-bookings-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── LOGIN ADMIN (modal) ──────────────────────────────────────── -->
   <div class="admin-modal" id="admin-modal" style="display:none;">
     <div class="admin-modal-box">
       <p class="section-label" style="margin-bottom:0.75rem;">Accès admin</p>
@@ -1455,11 +1405,9 @@
 
   <!-- ─── SCRIPTS ──────────────────────────────────────────────────── -->
   <script>
-    /* ─── Config ─────────────────────────────────────────────────────
-       Remplace par l'URL de ton backend Vercel une fois déployé.
-       En développement local, utilise http://localhost:3000
-    ─────────────────────────────────────────────────────────────── */
-    const API_BASE = "https://ton-projet.vercel.app"; // ← à remplacer après déploiement
+    /* ─── Config API ─────────────────────────────────────────────────
+       Remplace par ton URL Vercel après déploiement.              */
+    const API_BASE = "https://elisa-psy-site.vercel.app";
 
     /* ─── Sticky header ─────────────────────────────────────────── */
     const header = document.getElementById('header');
@@ -1467,7 +1415,7 @@
       header.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    /* ─── Hamburger menu ────────────────────────────────────────── */
+    /* ─── Hamburger ─────────────────────────────────────────────── */
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('main-nav');
     hamburger.addEventListener('click', () => nav.classList.toggle('open'));
@@ -1489,22 +1437,22 @@
        CALENDRIER PATIENT
     ═══════════════════════════════════════════════════════════════ */
     (function initCalendar() {
-      let currentType    = 'cabinet';
-      let currentYear    = new Date().getFullYear();
-      let currentMonth   = new Date().getMonth();
-      let selectedDate   = null;
-      let selectedSlot   = null;
-      let allSlots       = [];
+      let currentType  = 'cabinet';
+      let currentYear  = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+      let selectedDate = null;
+      let selectedSlot = null;
+      let allSlots     = [];
 
       const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin',
                          'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
       const DAYS_FR   = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
 
       const typeButtons  = document.querySelectorAll('#rdv-types .rdv-type-btn');
-      const calWidget    = document.getElementById('cal-widget');
       const calGrid      = document.getElementById('cal-grid');
       const calMonthLbl  = document.getElementById('cal-month-label');
       const calSlots     = document.getElementById('cal-slots');
+      const calWidget    = document.getElementById('cal-widget');
       const calForm      = document.getElementById('cal-form');
       const calFormRecap = document.getElementById('cal-form-recap');
       const calConfirm   = document.getElementById('cal-confirm');
@@ -1512,14 +1460,11 @@
       const calBackBtn   = document.getElementById('cal-back-btn');
       const calSubmitBtn = document.getElementById('cal-submit-btn');
 
-      // Charger les créneaux depuis l'API
       async function loadSlots() {
         try {
           const res = await fetch(`${API_BASE}/api/slots`);
           allSlots = await res.json();
-        } catch(e) {
-          allSlots = [];
-        }
+        } catch(e) { allSlots = []; }
         renderCalendar();
       }
 
@@ -1533,16 +1478,13 @@
       function slotsForDate(dateStr) {
         return allSlots.filter(s => {
           const d = new Date(s.datetime);
-          const ds = d.toISOString().slice(0,10);
-          return ds === dateStr && s.type === currentType;
+          return d.toISOString().slice(0,10) === dateStr && s.type === currentType;
         });
       }
 
       function renderCalendar() {
         calMonthLbl.textContent = `${MONTHS_FR[currentMonth]} ${currentYear}`;
         calGrid.innerHTML = '';
-
-        // En-têtes jours
         DAYS_FR.forEach(d => {
           const h = document.createElement('div');
           h.className = 'cal-day-header';
@@ -1551,7 +1493,6 @@
         });
 
         const firstDay = new Date(currentYear, currentMonth, 1);
-        // Offset : lundi = 0
         let startOffset = firstDay.getDay() - 1;
         if (startOffset < 0) startOffset = 6;
 
@@ -1561,18 +1502,16 @@
         );
         const today = new Date(); today.setHours(0,0,0,0);
 
-        // Cellules vides
         for (let i = 0; i < startOffset; i++) {
-          const empty = document.createElement('div');
-          empty.className = 'cal-day empty';
-          calGrid.appendChild(empty);
+          const e = document.createElement('div');
+          e.className = 'cal-day empty';
+          calGrid.appendChild(e);
         }
 
         for (let d = 1; d <= daysInMonth; d++) {
           const cell = document.createElement('div');
           cell.className = 'cal-day';
           cell.textContent = d;
-
           const thisDate = new Date(currentYear, currentMonth, d);
           const dateStr  = thisDate.toISOString().slice(0,10);
 
@@ -1586,13 +1525,9 @@
             if (selectedDate === dateStr) cell.classList.add('selected');
             cell.addEventListener('click', () => selectDate(dateStr));
           }
-
-          const todayStr = today.toISOString().slice(0,10);
-          if (dateStr === todayStr) cell.classList.add('today');
-
+          if (dateStr === today.toISOString().slice(0,10)) cell.classList.add('today');
           calGrid.appendChild(cell);
         }
-
         if (selectedDate) renderSlots(selectedDate);
       }
 
@@ -1606,18 +1541,15 @@
       function renderSlots(dateStr) {
         const slots = slotsForDate(dateStr);
         if (!slots.length) { calSlots.innerHTML = ''; return; }
-
         const d = new Date(dateStr + 'T00:00:00');
         const label = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
-
         let html = `<p class="cal-slots-title">Créneaux — ${label}</p><div class="cal-slots-grid">`;
         slots.forEach(s => {
           const time = new Date(s.datetime).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-          html += `<button class="cal-slot-btn${s.booked ? ' booked' : ''}" data-id="${s.id}" ${s.booked ? 'disabled' : ''}>${time}</button>`;
+          html += `<button class="cal-slot-btn${s.booked?' booked':''}" data-id="${s.id}" ${s.booked?'disabled':''}>${time}</button>`;
         });
         html += '</div>';
         calSlots.innerHTML = html;
-
         calSlots.querySelectorAll('.cal-slot-btn:not(.booked)').forEach(btn => {
           btn.addEventListener('click', () => openForm(btn.dataset.id));
         });
@@ -1629,8 +1561,7 @@
         const d  = new Date(selectedSlot.datetime);
         const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
         const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-        const typeLabel = selectedSlot.type === 'cabinet' ? 'Au cabinet · Mérignac' : 'Téléconsultation';
-        calFormRecap.innerHTML = `<strong>${ds} à ${ts}</strong> — ${typeLabel}`;
+        calFormRecap.innerHTML = `<strong>${ds} à ${ts}</strong> — ${selectedSlot.type === 'cabinet' ? 'Au cabinet · Mérignac' : 'Téléconsultation'}`;
         calWidget.style.display = 'none';
         calForm.style.display   = 'block';
       }
@@ -1646,29 +1577,20 @@
         const email   = document.getElementById('f-email').value.trim();
         const tel     = document.getElementById('f-tel').value.trim();
         const message = document.getElementById('f-message').value.trim();
-
-        if (!prenom || !nom || !email || !tel) {
-          alert('Merci de remplir tous les champs obligatoires (*).');
-          return;
-        }
-
+        if (!prenom || !nom || !email || !tel) { alert('Merci de remplir tous les champs obligatoires (*).'); return; }
         calSubmitBtn.textContent = 'Envoi…';
         calSubmitBtn.disabled = true;
-
         try {
           const res = await fetch(`${API_BASE}/api/book`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ slotId: selectedSlot.id, prenom, nom, email, tel, message })
           });
-
           if (!res.ok) throw new Error();
-
           const d  = new Date(selectedSlot.datetime);
           const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
           const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
           calConfirmTxt.textContent = `${ds} à ${ts} — ${prenom} ${nom}`;
-
           calForm.style.display    = 'none';
           calConfirm.style.display = 'block';
           loadSlots();
@@ -1679,31 +1601,21 @@
         }
       });
 
-      // Navigation mois
       document.getElementById('cal-prev').addEventListener('click', () => {
-        if (currentMonth === 0) { currentMonth = 11; currentYear--; }
-        else currentMonth--;
-        selectedDate = null;
-        calSlots.innerHTML = '';
-        renderCalendar();
+        if (currentMonth === 0) { currentMonth = 11; currentYear--; } else currentMonth--;
+        selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
       });
       document.getElementById('cal-next').addEventListener('click', () => {
-        if (currentMonth === 11) { currentMonth = 0; currentYear++; }
-        else currentMonth++;
-        selectedDate = null;
-        calSlots.innerHTML = '';
-        renderCalendar();
+        if (currentMonth === 11) { currentMonth = 0; currentYear++; } else currentMonth++;
+        selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
       });
 
-      // Sélecteur cabinet / visio
       typeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           typeButtons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          currentType  = btn.dataset.type;
-          selectedDate = null;
-          calSlots.innerHTML = '';
-          renderCalendar();
+          currentType = btn.dataset.type;
+          selectedDate = null; calSlots.innerHTML = ''; renderCalendar();
         });
       });
 
@@ -1716,24 +1628,22 @@
     (function initAdmin() {
       const ADMIN_PWD = "elisa2025"; // ← change ce mot de passe !
 
-      const trigger      = document.getElementById('admin-trigger');
-      const modal        = document.getElementById('admin-modal');
-      const modalClose   = document.getElementById('admin-modal-close');
-      const loginBtn     = document.getElementById('admin-login-btn');
-      const pwdInput     = document.getElementById('admin-pwd');
-      const errorMsg     = document.getElementById('admin-error');
-      const panel        = document.getElementById('admin-panel');
-      const logoutBtn    = document.getElementById('admin-logout');
-      const addBtn       = document.getElementById('admin-add-btn');
-      const adminDate    = document.getElementById('admin-date');
-      const adminTime    = document.getElementById('admin-time');
-      const slotsBox     = document.getElementById('admin-slots-container');
-      const bookingsBox  = document.getElementById('admin-bookings-container');
+      const trigger     = document.getElementById('admin-trigger');
+      const modal       = document.getElementById('admin-modal');
+      const modalClose  = document.getElementById('admin-modal-close');
+      const loginBtn    = document.getElementById('admin-login-btn');
+      const pwdInput    = document.getElementById('admin-pwd');
+      const errorMsg    = document.getElementById('admin-error');
+      const panel       = document.getElementById('admin-panel');
+      const logoutBtn   = document.getElementById('admin-logout');
+      const addBtn      = document.getElementById('admin-add-btn');
+      const adminDate   = document.getElementById('admin-date');
+      const adminTime   = document.getElementById('admin-time');
+      const slotsBox    = document.getElementById('admin-slots-container');
+      const bookingsBox = document.getElementById('admin-bookings-container');
 
-      let adminType = 'cabinet';
+      let adminType  = 'cabinet';
       let adminToken = sessionStorage.getItem('admin_token') || null;
-
-      // Restore session
       if (adminToken) showPanel();
 
       document.querySelectorAll('#admin-panel .rdv-type-btn').forEach(btn => {
@@ -1750,7 +1660,6 @@
         pwdInput.value = ''; errorMsg.style.display = 'none';
         setTimeout(() => pwdInput.focus(), 100);
       });
-
       modalClose.addEventListener('click', () => modal.style.display = 'none');
       modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 
@@ -1762,8 +1671,7 @@
           showPanel();
         } else {
           errorMsg.style.display = 'block';
-          pwdInput.value = '';
-          pwdInput.focus();
+          pwdInput.value = ''; pwdInput.focus();
         }
       });
       pwdInput.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
@@ -1776,7 +1684,7 @@
 
       function showPanel() {
         panel.style.display = 'block';
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        panel.scrollIntoView({ behavior:'smooth', block:'start' });
         loadAdminData();
       }
 
@@ -1788,23 +1696,17 @@
             fetch(`${API_BASE}/api/slots?all=true&token=${adminToken}`),
             fetch(`${API_BASE}/api/bookings?token=${adminToken}`)
           ]);
-          const slots    = await slotsRes.json();
-          const bookings = await bookingsRes.json();
-          renderAdminSlots(slots);
-          renderAdminBookings(bookings);
+          renderAdminSlots(await slotsRes.json());
+          renderAdminBookings(await bookingsRes.json());
         } catch(e) {
-          slotsBox.innerHTML    = '<p style="color:var(--text-light);font-size:0.85rem;">Erreur de chargement.</p>';
-          bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Erreur de chargement.</p>';
+          slotsBox.innerHTML = bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Erreur de chargement.</p>';
         }
       }
 
       function renderAdminSlots(slots) {
-        const future = slots
-          .filter(s => new Date(s.datetime) >= new Date())
+        const future = slots.filter(s => new Date(s.datetime) >= new Date())
           .sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
-
         if (!future.length) { slotsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucun créneau à venir.</p>'; return; }
-
         slotsBox.innerHTML = future.map(s => {
           const d  = new Date(s.datetime);
           const ds = d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'short' });
@@ -1816,7 +1718,6 @@
             <button class="admin-del-btn" data-id="${s.id}" title="Supprimer">✕</button>
           </div>`;
         }).join('');
-
         slotsBox.querySelectorAll('.admin-del-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (!confirm('Supprimer ce créneau ?')) return;
@@ -1829,7 +1730,6 @@
       function renderAdminBookings(bookings) {
         const sorted = [...bookings].sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
         if (!sorted.length) { bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucune réservation.</p>'; return; }
-
         bookingsBox.innerHTML = sorted.map(b => {
           const d  = new Date(b.datetime);
           const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
@@ -1838,19 +1738,16 @@
             <div class="admin-booking-name">${b.prenom} ${b.nom}</div>
             <div class="admin-booking-detail">${ds} à ${ts} · ${b.type === 'cabinet' ? 'Cabinet' : 'Visio'}</div>
             <div class="admin-booking-detail">${b.email} · ${b.tel}</div>
-            ${b.message ? `<div class="admin-booking-detail" style="margin-top:0.25rem;font-style:italic;">"${b.message}"</div>` : ''}
+            ${b.message ? `<div class="admin-booking-detail" style="font-style:italic;">"${b.message}"</div>` : ''}
           </div>`;
         }).join('');
       }
 
       addBtn.addEventListener('click', async () => {
-        const date = adminDate.value;
-        const time = adminTime.value;
+        const date = adminDate.value, time = adminTime.value;
         if (!date || !time) { alert('Merci de choisir une date et une heure.'); return; }
-
         const datetime = new Date(`${date}T${time}:00`).toISOString();
-        addBtn.textContent = '…';
-        addBtn.disabled = true;
+        addBtn.textContent = '…'; addBtn.disabled = true;
         try {
           await fetch(`${API_BASE}/api/slots`, {
             method: 'POST',
@@ -1859,11 +1756,8 @@
           });
           adminDate.value = ''; adminTime.value = '';
           loadAdminData();
-        } catch(e) {
-          alert('Erreur lors de l\'ajout.');
-        }
-        addBtn.textContent = '+ Ajouter';
-        addBtn.disabled = false;
+        } catch(e) { alert("Erreur lors de l'ajout."); }
+        addBtn.textContent = '+ Ajouter'; addBtn.disabled = false;
       });
     })();
   </script>
