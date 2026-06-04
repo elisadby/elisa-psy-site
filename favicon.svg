@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="16" fill="#C48A71"/>
+  <text x="50%" y="51%"
+        dominant-baseline="central" text-anchor="middle"
+        font-family="Cormorant Garamond, Georgia, 'Times New Roman', serif"
+        font-style="italic" font-weight="500" font-size="34"
+        letter-spacing="-1" fill="#FAF8F5">eb</text>
+</svg>
