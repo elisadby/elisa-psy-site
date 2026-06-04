@@ -1,5 +1,7 @@
-// api/bookings.js — Liste des réservations (admin)
-import { kv } from '@vercel/kv';
+// api/bookings.js — Liste des réservations (Upstash Redis)
+import { Redis } from '@upstash/redis';
+
+const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,9 +10,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    const allKeys  = await kv.keys('booking:*');
-    const bookings = await Promise.all(allKeys.map(k => kv.get(k)));
+    const keys     = await redis.keys('booking:*');
+    if (!keys.length) return res.json([]);
+    const bookings = await Promise.all(keys.map(k => redis.get(k)));
     return res.json(bookings.filter(Boolean));
   }
+
   res.status(405).json({ error: 'Method not allowed' });
 }
