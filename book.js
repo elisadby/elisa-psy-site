@@ -1,7 +1,9 @@
-// api/book.js — Réservation : marque le créneau, crée l'événement Google Calendar, envoie emails
-import { kv } from '@vercel/kv';
+// api/book.js — Réservation + Google Calendar + Gmail (Upstash Redis)
+import { Redis } from '@upstash/redis';
 import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
+
+const redis = Redis.fromEnv();
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,15 +19,15 @@ export default async function handler(req, res) {
   }
 
   // 1. Récupérer le créneau
-  const slot = await kv.get(`slot:${slotId}`);
-  if (!slot)        return res.status(404).json({ error: 'Créneau introuvable' });
-  if (slot.booked)  return res.status(409).json({ error: 'Créneau déjà réservé' });
+  const slot = await redis.get(`slot:${slotId}`);
+  if (!slot)       return res.status(404).json({ error: 'Créneau introuvable' });
+  if (slot.booked) return res.status(409).json({ error: 'Créneau déjà réservé' });
 
   // 2. Marquer comme réservé
   const booking = { ...slot, booked: true, patient: { prenom, nom, email, tel, message } };
-  await kv.set(`slot:${slotId}`, booking);
+  await redis.set(`slot:${slotId}`, booking);
 
-  // 3. Sauvegarder dans la liste des réservations
+  // 3. Sauvegarder la réservation
   const bookingRecord = {
     id: `booking_${Date.now()}`,
     slotId,
@@ -34,7 +36,7 @@ export default async function handler(req, res) {
     prenom, nom, email, tel, message,
     createdAt: new Date().toISOString()
   };
-  await kv.set(`booking:${bookingRecord.id}`, bookingRecord);
+  await redis.set(`booking:${bookingRecord.id}`, bookingRecord);
 
   // 4. Google Calendar
   try {
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
 
     const calendar = google.calendar({ version: 'v3', auth });
     const startDt  = new Date(slot.datetime);
-    const endDt    = new Date(startDt.getTime() + 60 * 60 * 1000); // +1h
+    const endDt    = new Date(startDt.getTime() + 60 * 60 * 1000);
 
     const typeLabel = slot.type === 'cabinet'
       ? 'Cabinet — 25bis avenue du Bédat, 33700 Mérignac'
@@ -62,7 +64,7 @@ export default async function handler(req, res) {
         end:   { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
         attendees: [
           { email: process.env.PRAT_EMAIL },
-          { email: email }
+          { email }
         ],
         reminders: {
           useDefault: false,
@@ -75,7 +77,6 @@ export default async function handler(req, res) {
     });
   } catch(e) {
     console.error('Google Calendar error:', e.message);
-    // On continue même si le calendrier échoue
   }
 
   // 5. Emails de confirmation
@@ -96,7 +97,7 @@ export default async function handler(req, res) {
     const timeStr   = startDt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Paris' });
     const typeLabel = slot.type === 'cabinet' ? 'Au cabinet (Mérignac)' : 'Téléconsultation (visio)';
 
-    const emailBase = `
+    const emailBody = `
       <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.7;">
         <h2 style="font-weight:400;font-size:1.4rem;margin-bottom:0.5rem;">Rendez-vous confirmé</h2>
         <table style="width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:0.9rem;">
@@ -114,7 +115,7 @@ export default async function handler(req, res) {
       from: process.env.PRAT_EMAIL,
       to: process.env.PRAT_EMAIL,
       subject: `Nouveau RDV — ${prenom} ${nom} · ${dateStr} ${timeStr}`,
-      html: emailBase
+      html: emailBody
     });
 
     // Email au patient
@@ -126,7 +127,7 @@ export default async function handler(req, res) {
         <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.7;">
           <h2 style="font-weight:400;font-size:1.4rem;">Bonjour ${prenom},</h2>
           <p>Votre rendez-vous a bien été enregistré.</p>
-          ${emailBase}
+          ${emailBody}
           <p style="margin-top:1.5rem;font-size:0.85rem;">Pour annuler ou modifier, merci de me contacter au moins 24h à l'avance :<br>
           <a href="tel:0670936138" style="color:#C48A71;">06 70 93 61 38</a> ou
           <a href="mailto:edebussy.psy@gmail.com" style="color:#C48A71;">edebussy.psy@gmail.com</a></p>
