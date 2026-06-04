@@ -1,7 +1,5 @@
-// api/book.js — Réservation + Google Calendar + Gmail (Upstash Redis)
+// api/book.js — avec logs détaillés pour debug
 import { Redis } from '@upstash/redis';
-import { google } from 'googleapis';
-import nodemailer from 'nodemailer';
 
 const redis = Redis.fromEnv();
 
@@ -10,7 +8,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { slotId, prenom, nom, email, tel, message } = req.body;
@@ -38,18 +35,28 @@ export default async function handler(req, res) {
   };
   await redis.set(`booking:${bookingRecord.id}`, bookingRecord);
 
-  // 4. Google Calendar
+  // 4. Vérifier les variables d'environnement
+  const envCheck = {
+    hasClientId: !!process.env.GOOGLE_CLIENT_ID,
+    hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+    hasRefreshToken: !!process.env.GOOGLE_REFRESH_TOKEN,
+    hasPratEmail: !!process.env.PRAT_EMAIL,
+    refreshTokenStart: process.env.GOOGLE_REFRESH_TOKEN?.slice(0, 10) || 'MANQUANT'
+  };
+  console.log('ENV CHECK:', JSON.stringify(envCheck));
+
+  // 5. Google Calendar
+  let calendarError = null;
   try {
+    const { google } = await import('googleapis');
     const auth = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
     );
     auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
-
     const calendar = google.calendar({ version: 'v3', auth });
-    const startDt  = new Date(slot.datetime);
-    const endDt    = new Date(startDt.getTime() + 60 * 60 * 1000);
-
+    const startDt = new Date(slot.datetime);
+    const endDt   = new Date(startDt.getTime() + 60 * 60 * 1000);
     const typeLabel = slot.type === 'cabinet'
       ? 'Cabinet — 25bis avenue du Bédat, 33700 Mérignac'
       : 'Téléconsultation (visio)';
@@ -62,10 +69,7 @@ export default async function handler(req, res) {
         description: `Type : ${typeLabel}\nTéléphone : ${tel}\nEmail : ${email}${message ? `\nMessage : ${message}` : ''}`,
         start: { dateTime: startDt.toISOString(), timeZone: 'Europe/Paris' },
         end:   { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
-        attendees: [
-          { email: process.env.PRAT_EMAIL },
-          { email }
-        ],
+        attendees: [{ email: process.env.PRAT_EMAIL }, { email }],
         reminders: {
           useDefault: false,
           overrides: [
@@ -75,13 +79,17 @@ export default async function handler(req, res) {
         }
       }
     });
+    console.log('CALENDAR: OK');
   } catch(e) {
-    console.error('Google Calendar error:', e.message);
+    calendarError = e.message;
+    console.error('CALENDAR ERROR:', e.message);
   }
 
-  // 5. Emails de confirmation
+  // 6. Email
+  let emailError = null;
   try {
-    const transporter = nodemailer.createTransport({
+    const nodemailer = await import('nodemailer');
+    const transporter = nodemailer.default.createTransport({
       service: 'gmail',
       auth: {
         type: 'OAuth2',
@@ -99,18 +107,13 @@ export default async function handler(req, res) {
 
     const emailBody = `
       <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.7;">
-        <h2 style="font-weight:400;font-size:1.4rem;margin-bottom:0.5rem;">Rendez-vous confirmé</h2>
-        <table style="width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:0.9rem;">
-          <tr><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;color:#6B6560;width:130px;">Patient·e</td><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;"><strong>${prenom} ${nom}</strong></td></tr>
-          <tr><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;color:#6B6560;">Date</td><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;">${dateStr} à ${timeStr}</td></tr>
-          <tr><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;color:#6B6560;">Type</td><td style="padding:0.5rem 0;border-bottom:1px solid #E8E2D9;">${typeLabel}</td></tr>
-          <tr><td style="padding:0.5rem 0;color:#6B6560;">Téléphone</td><td style="padding:0.5rem 0;">${tel}</td></tr>
-        </table>
-        ${message ? `<p style="font-style:italic;color:#6B6560;font-size:0.85rem;">"${message}"</p>` : ''}
-        <p style="font-size:0.82rem;color:#6B6560;margin-top:2rem;">Elisa de Bussy — Psychopraticienne &amp; thérapeute<br>25bis avenue du Bédat, 33700 Mérignac · edebussy.psy@gmail.com</p>
+        <h2 style="font-weight:400;font-size:1.4rem;">Rendez-vous confirmé</h2>
+        <p><strong>${prenom} ${nom}</strong> — ${dateStr} à ${timeStr} — ${typeLabel}</p>
+        <p>Téléphone : ${tel}</p>
+        ${message ? `<p style="font-style:italic;">"${message}"</p>` : ''}
+        <p style="font-size:0.82rem;color:#6B6560;margin-top:2rem;">Elisa de Bussy — Psychopraticienne &amp; thérapeute</p>
       </div>`;
 
-    // Email au praticien
     await transporter.sendMail({
       from: process.env.PRAT_EMAIL,
       to: process.env.PRAT_EMAIL,
@@ -118,25 +121,25 @@ export default async function handler(req, res) {
       html: emailBody
     });
 
-    // Email au patient
     await transporter.sendMail({
       from: `"Elisa de Bussy" <${process.env.PRAT_EMAIL}>`,
       to: email,
       subject: `Votre rendez-vous est confirmé — ${dateStr} à ${timeStr}`,
-      html: `
-        <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.7;">
-          <h2 style="font-weight:400;font-size:1.4rem;">Bonjour ${prenom},</h2>
-          <p>Votre rendez-vous a bien été enregistré.</p>
-          ${emailBody}
-          <p style="margin-top:1.5rem;font-size:0.85rem;">Pour annuler ou modifier, merci de me contacter au moins 24h à l'avance :<br>
-          <a href="tel:0670936138" style="color:#C48A71;">06 70 93 61 38</a> ou
-          <a href="mailto:edebussy.psy@gmail.com" style="color:#C48A71;">edebussy.psy@gmail.com</a></p>
-        </div>`
+      html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;">
+        <h2 style="font-weight:400;">Bonjour ${prenom},</h2>
+        <p>Votre rendez-vous a bien été enregistré.</p>
+        ${emailBody}
+        <p>Pour annuler : <a href="tel:0670936138">06 70 93 61 38</a> ou <a href="mailto:edebussy.psy@gmail.com">edebussy.psy@gmail.com</a></p>
+      </div>`
     });
-
+    console.log('EMAIL: OK');
   } catch(e) {
-    console.error('Email error:', e.message);
+    emailError = e.message;
+    console.error('EMAIL ERROR:', e.message);
   }
 
-  return res.status(200).json({ success: true });
+  return res.status(200).json({
+    success: true,
+    debug: { envCheck, calendarError, emailError }
+  });
 }
