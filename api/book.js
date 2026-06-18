@@ -62,13 +62,14 @@ export default async function handler(req, res) {
   if (!slot)       return res.status(404).json({ error: 'Créneau introuvable' });
   if (slot.booked) return res.status(409).json({ error: 'Créneau déjà réservé' });
 
+  // Marquer comme réservé
   await redis.set(`slot:${slotId}`, { ...slot, booked: true, patient: { prenom, nom, email, tel, message } });
 
+  // Sauvegarder la réservation
   const bookingId = `booking_${Date.now()}`;
   await redis.set(`booking:${bookingId}`, {
     id: bookingId, slotId,
     datetime: slot.datetime, type: slot.type,
-    gcalEventId: slot.gcalEventId || null,
     prenom, nom, email, tel, message,
     createdAt: new Date().toISOString(), reminderSent: false
   });
@@ -80,26 +81,26 @@ export default async function handler(req, res) {
   const typeLabel = slot.type === 'cabinet' ? 'Au cabinet — 25bis avenue du Bédat, 33700 Mérignac' : 'Téléconsultation (visio)';
   const typeCourt = slot.type === 'cabinet' ? 'Cabinet · Mérignac' : 'Visio';
 
-  // Google Calendar
+  // Google Calendar — TOUJOURS créer un nouvel événement, ne jamais modifier la plage disponible
   const auth = await getAuthClient();
   try {
     const calendar = google.calendar({ version: 'v3', auth });
-    const eventBody = {
-      summary: `RDV — ${prenom} ${nom}`,
-      description: `Type : ${typeLabel}\nTéléphone : ${tel}\nEmail : ${email}${message ? `\nMessage : ${message}` : ''}`,
-      start: { dateTime: startDt.toISOString(), timeZone: 'Europe/Paris' },
-      end:   { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
-      colorId: '6',
-    };
-    if (slot.gcalEventId) {
-      await calendar.events.patch({ calendarId: 'primary', eventId: slot.gcalEventId, sendUpdates: 'none', requestBody: eventBody });
-    } else {
-      await calendar.events.insert({ calendarId: 'primary', sendUpdates: 'none', requestBody: eventBody });
-    }
+    await calendar.events.insert({
+      calendarId: 'primary',
+      sendUpdates: 'none',
+      requestBody: {
+        summary: `RDV — ${prenom} ${nom}`,
+        description: `Type : ${typeLabel}\nTéléphone : ${tel}\nEmail : ${email}${message ? `\nMessage : ${message}` : ''}`,
+        start: { dateTime: startDt.toISOString(), timeZone: 'Europe/Paris' },
+        end:   { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
+        colorId: '11', // Rouge tomate pour les RDV confirmés
+      }
+    });
+    console.log('CALENDAR: RDV créé avec succès');
   } catch(e) { console.error('CALENDAR ERROR:', e.message); }
 
   // Emails via Brevo
-  const s = `font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.8;`;
+  const s  = `font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.8;`;
   const tL = `padding:0.6rem 0;border-bottom:1px solid #E8E2D9;color:#6B6560;width:130px;`;
   const tR = `padding:0.6rem 0;border-bottom:1px solid #E8E2D9;`;
   const details = `
@@ -119,11 +120,13 @@ export default async function handler(req, res) {
   </p>`;
 
   try {
+    // Email au praticien
     await sendBrevoEmail({
       to: process.env.PRAT_EMAIL, toName: 'Elisa de Bussy',
       subject: `Nouveau RDV — ${prenom} ${nom} · ${dateStr} à ${timeStr}`,
       html: `<div style="${s}"><h2 style="font-weight:400;font-size:1.3rem;">Nouvelle réservation</h2>${details}${footer}</div>`
     });
+    // Email au patient
     await sendBrevoEmail({
       to: email, toName: `${prenom} ${nom}`,
       subject: `Votre rendez-vous est confirmé — ${dateStr} à ${timeStr}`,
@@ -131,12 +134,13 @@ export default async function handler(req, res) {
         <h2 style="font-weight:400;font-size:1.3rem;">Bonjour ${prenom},</h2>
         <p>Votre rendez-vous a bien été enregistré :</p>
         ${details}
-        <p>Pour annuler, contactez-moi au moins 24h à l'avance :<br>
+        <p>Pour annuler ou modifier, merci de me contacter <strong>au moins 24h à l'avance</strong> :<br>
         <a href="tel:+33670936138" style="color:#C48A71;">06 70 93 61 38</a> ou 
         <a href="mailto:${process.env.PRAT_EMAIL}" style="color:#C48A71;">${process.env.PRAT_EMAIL}</a></p>
         ${footer}
       </div>`
     });
+    console.log('EMAILS: OK via Brevo');
   } catch(e) { console.error('EMAIL ERROR:', e.message); }
 
   return res.status(200).json({ success: true, bookingId });
