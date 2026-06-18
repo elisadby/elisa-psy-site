@@ -3,11 +3,11 @@
   "crons": [
     {
       "path": "/api/reminder",
-      "schedule": "0 * * * *"
+      "schedule": "0 8 * * *"
     },
     {
       "path": "/api/sync",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 7 * * *"
     }
   ]
 }
