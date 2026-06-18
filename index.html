@@ -1777,7 +1777,8 @@
         btn.textContent = '↻ Synchroniser maintenant';
         btn.disabled = false;
       });
-        if (adminToken) { showPanel(); return; }
+
+      trigger.addEventListener('click', () => {
         modal.style.display = 'flex';
         pwdInput.value = ''; errorMsg.style.display = 'none';
         setTimeout(() => pwdInput.focus(), 100);
