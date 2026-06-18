@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const auth = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'https://elisa-psy-site.vercel.app/api/auth/callback'
+      'https://elisadebussy.fr/api/auth/callback'
     );
 
     const { tokens } = await auth.getToken(code);
