@@ -1,5 +1,4 @@
-// api/sync.js — Lit Google Agenda et synchronise les créneaux dans Upstash
-// Les événements [CABINET] ou [VISIO] sont découpés en tranches d'1h
+// api/sync.js — Synchronise les créneaux depuis Google Agenda vers Upstash
 
 import { Redis } from '@upstash/redis';
 import { google } from 'googleapis';
@@ -10,25 +9,19 @@ async function getAuthClient() {
   const auth = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'https://elisa-psy-site.vercel.app/api/auth/callback'
+    'https://elisadebussy.fr/api/auth/callback'
   );
-
-  // Récupérer le refresh token stocké dans Redis (mis à jour par /api/auth/callback)
   let refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
   try {
     const stored = await redis.get('google:refresh_token');
     if (stored) refreshToken = stored;
   } catch(e) {}
-
   auth.setCredentials({ refresh_token: refreshToken });
-
-  // Sauvegarder le nouveau access token si rafraîchi
   auth.on('tokens', async (tokens) => {
     if (tokens.refresh_token) {
       await redis.set('google:refresh_token', tokens.refresh_token);
     }
   });
-
   return auth;
 }
 
@@ -42,24 +35,53 @@ export default async function handler(req, res) {
     const auth     = await getAuthClient();
     const calendar = google.calendar({ version: 'v3', auth });
 
-    // Lire les événements des 60 prochains jours
     const now     = new Date();
     const maxDate = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
 
+    // Récupérer tous les événements "Disponible" dans Google Agenda
     const response = await calendar.events.list({
       calendarId: 'primary',
       timeMin: now.toISOString(),
       timeMax: maxDate.toISOString(),
       singleEvents: true,
       orderBy: 'startTime',
-      q: 'Disponible' // Ne récupère que les événements contenant "Disponible"
+      q: 'Disponible'
     });
 
-    const events = response.data.items || [];
+    const events   = response.data.items || [];
     let slotsCreated = 0;
+    let slotsDeleted = 0;
 
+    // Construire un Set des IDs d'événements Google encore actifs
+    const activeGcalEventIds = new Set(events.map(e => e.id));
+
+    // Récupérer tous les créneaux existants dans Upstash
+    const allKeys = await redis.keys('slot:slot_gcal_*');
+    
+    // Supprimer les créneaux dont l'événement Google n'existe plus
+    for (const key of allKeys) {
+      const slot = await redis.get(key);
+      if (!slot) continue;
+      
+      // Si le créneau est libre et que son événement Google a été supprimé → supprimer
+      if (!slot.booked && slot.gcalEventId && !activeGcalEventIds.has(slot.gcalEventId)) {
+        await redis.del(key);
+        slotsDeleted++;
+      }
+    }
+
+    // Supprimer aussi les créneaux passés
+    for (const key of allKeys) {
+      const slot = await redis.get(key);
+      if (slot && !slot.booked && new Date(slot.datetime) < now) {
+        await redis.del(key);
+        slotsDeleted++;
+      }
+    }
+
+    // Ajouter les nouveaux créneaux depuis Google Agenda
     for (const event of events) {
-      const title = event.summary || '';
+      const title     = event.summary || '';
       const isCabinet = title.toUpperCase().includes('[CABINET]');
       const isVisio   = title.toUpperCase().includes('[VISIO]');
       if (!isCabinet && !isVisio) continue;
@@ -75,11 +97,11 @@ export default async function handler(req, res) {
         const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
         if (slotEnd > endTime) break;
 
-        const slotId  = `slot_gcal_${eventId}_${slotStart.getTime()}`;
+        const slotId   = `slot_gcal_${eventId}_${slotStart.getTime()}`;
         const existing = await redis.get(`slot:${slotId}`);
 
         // Ne pas écraser un créneau déjà réservé
-        if (!existing || !existing.booked) {
+        if (!existing) {
           await redis.set(`slot:${slotId}`, {
             id: slotId,
             datetime: slotStart.toISOString(),
@@ -95,16 +117,12 @@ export default async function handler(req, res) {
       }
     }
 
-    // Nettoyer les anciens créneaux libres dépassés
-    const allKeys = await redis.keys('slot:slot_gcal_*');
-    for (const key of allKeys) {
-      const slot = await redis.get(key);
-      if (slot && !slot.booked && new Date(slot.datetime) < now) {
-        await redis.del(key);
-      }
-    }
-
-    return res.json({ success: true, slotsCreated, eventsFound: events.length });
+    return res.json({ 
+      success: true, 
+      slotsCreated, 
+      slotsDeleted,
+      eventsFound: events.length 
+    });
 
   } catch(e) {
     console.error('SYNC ERROR:', e.message);
