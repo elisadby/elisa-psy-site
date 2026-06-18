@@ -1,7 +1,13 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "crons": [
+    {
+      "path": "/api/reminder",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/sync",
+      "schedule": "*/30 * * * *"
+    }
   ]
 }
