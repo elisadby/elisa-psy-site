@@ -1,4 +1,4 @@
-// api/book.js — Réservation + Google Calendar + emails via Brevo
+// api/book.js — Réservation + découpe la plage Google Agenda + emails via Brevo
 
 import { Redis } from '@upstash/redis';
 import { google } from 'googleapis';
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
   if (!slot)       return res.status(404).json({ error: 'Créneau introuvable' });
   if (slot.booked) return res.status(409).json({ error: 'Créneau déjà réservé' });
 
-  // Marquer comme réservé
+  // Marquer comme réservé dans Upstash
   await redis.set(`slot:${slotId}`, { ...slot, booked: true, patient: { prenom, nom, email, tel, message } });
 
   // Sauvegarder la réservation
@@ -70,37 +70,99 @@ export default async function handler(req, res) {
   await redis.set(`booking:${bookingId}`, {
     id: bookingId, slotId,
     datetime: slot.datetime, type: slot.type,
+    gcalEventId: slot.gcalEventId || null,
     prenom, nom, email, tel, message,
     createdAt: new Date().toISOString(), reminderSent: false
   });
 
-  const startDt   = new Date(slot.datetime);
-  const endDt     = new Date(startDt.getTime() + 60 * 60 * 1000);
-  const dateStr   = startDt.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' });
-  const timeStr   = startDt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Paris' });
+  const slotStart = new Date(slot.datetime);
+  const slotEnd   = new Date(slotStart.getTime() + 60 * 60 * 1000);
+  const dateStr   = slotStart.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' });
+  const timeStr   = slotStart.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', timeZone:'Europe/Paris' });
   const typeLabel = slot.type === 'cabinet' ? 'Au cabinet — 25bis avenue du Bédat, 33700 Mérignac' : 'Téléconsultation (visio)';
   const typeCourt = slot.type === 'cabinet' ? 'Cabinet · Mérignac' : 'Visio';
+  const typeTag   = slot.type === 'cabinet' ? '[CABINET]' : '[VISIO]';
 
-  // Google Calendar — TOUJOURS créer un nouvel événement, ne jamais modifier la plage disponible
+  // Google Calendar
   const auth = await getAuthClient();
   try {
     const calendar = google.calendar({ version: 'v3', auth });
+
+    if (slot.gcalEventId) {
+      // Récupérer l'événement disponible original
+      const originalEvent = await calendar.events.get({
+        calendarId: 'primary',
+        eventId: slot.gcalEventId
+      });
+
+      const origStart = new Date(originalEvent.data.start.dateTime);
+      const origEnd   = new Date(originalEvent.data.end.dateTime);
+
+      // Supprimer l'événement disponible original
+      await calendar.events.delete({
+        calendarId: 'primary',
+        eventId: slot.gcalEventId
+      });
+
+      // Recréer les plages disponibles restantes (avant et après le RDV)
+      // Plage AVANT le RDV (si elle existe)
+      if (origStart < slotStart) {
+        await calendar.events.insert({
+          calendarId: 'primary',
+          sendUpdates: 'none',
+          requestBody: {
+            summary: `${typeTag} Disponible`,
+            start: { dateTime: origStart.toISOString(), timeZone: 'Europe/Paris' },
+            end:   { dateTime: slotStart.toISOString(), timeZone: 'Europe/Paris' },
+            colorId: '7', // Bleu paon
+          }
+        });
+      }
+
+      // Plage APRÈS le RDV (si elle existe)
+      if (slotEnd < origEnd) {
+        await calendar.events.insert({
+          calendarId: 'primary',
+          sendUpdates: 'none',
+          requestBody: {
+            summary: `${typeTag} Disponible`,
+            start: { dateTime: slotEnd.toISOString(), timeZone: 'Europe/Paris' },
+            end:   { dateTime: origEnd.toISOString(), timeZone: 'Europe/Paris' },
+            colorId: '7',
+          }
+        });
+      }
+    }
+
+    // Créer l'événement RDV
     await calendar.events.insert({
       calendarId: 'primary',
       sendUpdates: 'none',
       requestBody: {
         summary: `RDV — ${prenom} ${nom}`,
         description: `Type : ${typeLabel}\nTéléphone : ${tel}\nEmail : ${email}${message ? `\nMessage : ${message}` : ''}`,
-        start: { dateTime: startDt.toISOString(), timeZone: 'Europe/Paris' },
-        end:   { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
-        colorId: '11', // Rouge tomate pour les RDV confirmés
+        start: { dateTime: slotStart.toISOString(), timeZone: 'Europe/Paris' },
+        end:   { dateTime: slotEnd.toISOString(),   timeZone: 'Europe/Paris' },
+        colorId: '11', // Rouge tomate
       }
     });
-    console.log('CALENDAR: RDV créé avec succès');
+
+    console.log('CALENDAR: RDV créé, plage disponible mise à jour');
+
+    // Re-synchroniser Upstash pour refléter les nouvelles plages
+    // Les anciens créneaux de l'événement original doivent être supprimés
+    const allSlotKeys = await redis.keys('slot:slot_gcal_*');
+    for (const key of allSlotKeys) {
+      const s = await redis.get(key);
+      if (s && !s.booked && s.gcalEventId === slot.gcalEventId) {
+        await redis.del(key);
+      }
+    }
+
   } catch(e) { console.error('CALENDAR ERROR:', e.message); }
 
   // Emails via Brevo
-  const s  = `font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.8;`;
+  const st = `font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2B2927;line-height:1.8;`;
   const tL = `padding:0.6rem 0;border-bottom:1px solid #E8E2D9;color:#6B6560;width:130px;`;
   const tR = `padding:0.6rem 0;border-bottom:1px solid #E8E2D9;`;
   const details = `
@@ -120,17 +182,15 @@ export default async function handler(req, res) {
   </p>`;
 
   try {
-    // Email au praticien
     await sendBrevoEmail({
       to: process.env.PRAT_EMAIL, toName: 'Elisa de Bussy',
       subject: `Nouveau RDV — ${prenom} ${nom} · ${dateStr} à ${timeStr}`,
-      html: `<div style="${s}"><h2 style="font-weight:400;font-size:1.3rem;">Nouvelle réservation</h2>${details}${footer}</div>`
+      html: `<div style="${st}"><h2 style="font-weight:400;font-size:1.3rem;">Nouvelle réservation</h2>${details}${footer}</div>`
     });
-    // Email au patient
     await sendBrevoEmail({
       to: email, toName: `${prenom} ${nom}`,
       subject: `Votre rendez-vous est confirmé — ${dateStr} à ${timeStr}`,
-      html: `<div style="${s}">
+      html: `<div style="${st}">
         <h2 style="font-weight:400;font-size:1.3rem;">Bonjour ${prenom},</h2>
         <p>Votre rendez-vous a bien été enregistré :</p>
         ${details}
@@ -140,7 +200,6 @@ export default async function handler(req, res) {
         ${footer}
       </div>`
     });
-    console.log('EMAILS: OK via Brevo');
   } catch(e) { console.error('EMAIL ERROR:', e.message); }
 
   return res.status(200).json({ success: true, bookingId });
