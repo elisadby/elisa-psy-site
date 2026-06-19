@@ -269,6 +269,13 @@ export default async function handler(req, res) {
     });
 
     meetLink = rdvEvent.data.hangoutLink || null;
+    // Sauvegarder le lien Meet dans la réservation
+    if (meetLink) {
+      const savedBooking = await redis.get(`booking:${bookingId}`);
+      if (savedBooking) {
+        await redis.set(`booking:${bookingId}`, { ...savedBooking, meetLink });
+      }
+    }
 
   } catch(e) { console.error('CALENDAR ERROR:', e.message); }
 
