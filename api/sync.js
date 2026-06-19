@@ -38,7 +38,6 @@ export default async function handler(req, res) {
     const now     = new Date();
     const maxDate = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
 
-    // Récupérer tous les événements "Disponible" dans Google Agenda
     const response = await calendar.events.list({
       calendarId: 'primary',
       timeMin: now.toISOString(),
@@ -48,29 +47,26 @@ export default async function handler(req, res) {
       q: 'Disponible'
     });
 
-    const events   = response.data.items || [];
+    const events     = response.data.items || [];
     let slotsCreated = 0;
     let slotsDeleted = 0;
+    const debugEvents = [];
 
     // Construire un Set des IDs d'événements Google encore actifs
     const activeGcalEventIds = new Set(events.map(e => e.id));
 
-    // Récupérer tous les créneaux existants dans Upstash
-    const allKeys = await redis.keys('slot:slot_gcal_*');
-    
     // Supprimer les créneaux dont l'événement Google n'existe plus
+    const allKeys = await redis.keys('slot:slot_gcal_*');
     for (const key of allKeys) {
       const slot = await redis.get(key);
       if (!slot) continue;
-      
-      // Si le créneau est libre et que son événement Google a été supprimé → supprimer
       if (!slot.booked && slot.gcalEventId && !activeGcalEventIds.has(slot.gcalEventId)) {
         await redis.del(key);
         slotsDeleted++;
       }
     }
 
-    // Supprimer aussi les créneaux passés
+    // Supprimer les créneaux passés
     for (const key of allKeys) {
       const slot = await redis.get(key);
       if (slot && !slot.booked && new Date(slot.datetime) < now) {
@@ -79,11 +75,20 @@ export default async function handler(req, res) {
       }
     }
 
-    // Ajouter les nouveaux créneaux depuis Google Agenda
+    // Ajouter les nouveaux créneaux
     for (const event of events) {
       const title     = event.summary || '';
       const isCabinet = title.toUpperCase().includes('[CABINET]');
       const isVisio   = title.toUpperCase().includes('[VISIO]');
+
+      debugEvents.push({
+        title,
+        isCabinet,
+        isVisio,
+        start: event.start,
+        end: event.end
+      });
+
       if (!isCabinet && !isVisio) continue;
 
       const type      = isCabinet ? 'cabinet' : 'visio';
@@ -91,7 +96,6 @@ export default async function handler(req, res) {
       const startTime = new Date(event.start.dateTime || event.start.date);
       const endTime   = new Date(event.end.dateTime   || event.end.date);
 
-      // Découper en créneaux d'1h
       let slotStart = new Date(startTime);
       while (slotStart < endTime) {
         const slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
@@ -100,7 +104,6 @@ export default async function handler(req, res) {
         const slotId   = `slot_gcal_${eventId}_${slotStart.getTime()}`;
         const existing = await redis.get(`slot:${slotId}`);
 
-        // Ne pas écraser un créneau déjà réservé
         if (!existing) {
           await redis.set(`slot:${slotId}`, {
             id: slotId,
@@ -117,11 +120,12 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.json({ 
-      success: true, 
-      slotsCreated, 
+    return res.json({
+      success: true,
+      slotsCreated,
       slotsDeleted,
-      eventsFound: events.length 
+      eventsFound: events.length,
+      debug: debugEvents
     });
 
   } catch(e) {
