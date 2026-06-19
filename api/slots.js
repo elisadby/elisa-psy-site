@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     // Déclencher une sync silencieuse en arrière-plan
     try {
-      fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://elisa-psy-site.vercel.app'}/api/sync`, {
+      fetch(`https://elisadebussy.fr/api/sync`, {
         method: 'GET'
       }).catch(() => {}); // Fire and forget
     } catch(e) {}
