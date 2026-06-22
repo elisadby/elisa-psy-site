@@ -799,11 +799,14 @@ async function loadAgenda() {
   const today  = new Date().toDateString();
   const labels = ['Lun','Mar','Mer','Jeu','Ven'];
 
+  const weekStart = days[0].toISOString().split('T')[0];
+  const weekEnd   = days[4].toISOString().split('T')[0];
+
   let bookings = [];
   try {
-    const d = await api('GET', 'dashboard');
-    bookings = d.rdvAujourdhui || [];
-  } catch(e) {}
+    bookings = await api('GET', `bookings&weekStart=${weekStart}&weekEnd=${weekEnd}`);
+    if (!Array.isArray(bookings)) bookings = [];
+  } catch(e) { bookings = []; }
 
   const start = days[0].toISOString().split('T')[0];
   const end   = days[4].toISOString().split('T')[0];
