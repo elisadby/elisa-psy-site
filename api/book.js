@@ -297,5 +297,69 @@ export default async function handler(req, res) {
     console.log('EMAILS OK via Brevo');
   } catch(e) { console.error('EMAIL ERROR:', e.message); }
 
+  // ── AUTOMATISATIONS BACKOFFICE ────────────────────────────────────────────
+
+  try {
+    const rdvDate     = slotStart.toISOString().split('T')[0];
+    const rdvDateFR   = slotStart.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' });
+    const nomComplet  = `${prenom} ${nom}`;
+
+    // 1. Fiche patient automatique si email inconnu
+    const patientKeys = await redis.keys('patient:*');
+    const allPatients = await Promise.all(patientKeys.map(k => redis.get(k)));
+    const existingPatient = allPatients.find(p => p && p.email === email);
+
+    if (!existingPatient) {
+      const pid = `patient_${Date.now()}`;
+      await redis.set(`patient:${pid}`, {
+        id: pid, prenom, nom, email, tel,
+        debut: rdvDate,
+        motif: message || '',
+        createdAt: new Date().toISOString(),
+        source: 'booking'
+      });
+    }
+
+    // 2. Todo SMS Confirmation → jour précédent le RDV (seulement nouveau patient)
+    if (!existingPatient) {
+      const veille = new Date(slotStart);
+      veille.setDate(veille.getDate() - 1);
+      const veilleDate = veille.toISOString().split('T')[0];
+      const smsId = `sms_${bookingId}`;
+      await redis.set(`todo:${veilleDate}:${smsId}`, {
+        id: smsId,
+        texte: `SMS Confirmation · ${nomComplet}`,
+        type: 'sms',
+        done: false,
+        bookingId,
+        createdAt: new Date().toISOString()
+      }, { ex: 30 * 24 * 60 * 60 });
+    }
+
+    // 3. Todo Envoyer facture → jour du RDV
+    const factId = `fact_${bookingId}`;
+    await redis.set(`todo:${rdvDate}:${factId}`, {
+      id: factId,
+      texte: `Envoyer facture · ${nomComplet} · ${rdvDateFR}`,
+      type: 'facture',
+      done: false,
+      bookingId,
+      createdAt: new Date().toISOString()
+    }, { ex: 30 * 24 * 60 * 60 });
+
+    // 4. Todo Note séance → jour du RDV
+    const noteId = `note_${bookingId}`;
+    await redis.set(`todo:${rdvDate}:${noteId}`, {
+      id: noteId,
+      texte: `Note séance · ${nomComplet} · ${rdvDateFR}`,
+      type: 'note',
+      done: false,
+      bookingId,
+      createdAt: new Date().toISOString()
+    }, { ex: 30 * 24 * 60 * 60 });
+
+    console.log('BACKOFFICE TODOS OK');
+  } catch(e) { console.error('BACKOFFICE ERROR:', e.message); }
+
   return res.status(200).json({ success: true, bookingId });
 }
