@@ -6,9 +6,20 @@ import crypto from 'crypto';
 
 const redis = Redis.fromEnv();
 
+function parseCookies(req) {
+  const raw = req.headers?.cookie || '';
+  if (!raw) return {};
+  return Object.fromEntries(
+    raw.split(';')
+      .map(c => { const [k,...v] = c.trim().split('='); return [k.trim(), decodeURIComponent(v.join('='))]; })
+      .filter(([k]) => k)
+  );
+}
+
 function verifyCookie(req) {
   const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'change-me-in-vercel';
-  const cookie = req.cookies?.admin_session || '';
+  const cookies = req.cookies || parseCookies(req);
+  const cookie = cookies?.admin_session || '';
   if (!cookie) return false;
   const lastDot = cookie.lastIndexOf('.');
   if (lastDot === -1) return false;
@@ -32,8 +43,26 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Non authentifié' });
   }
 
-  const { resource, id } = req.query;
+  const rawResource = req.query.resource || '';
+  const resource = rawResource.split('&')[0];
+  const { id } = req.query;
   const method = req.method;
+
+  // BOOKINGS agenda semaine
+  if (resource === 'bookings') {
+    const weekStart = req.query.weekStart || '';
+    const weekEnd   = req.query.weekEnd   || '';
+    const keys = await redis.keys('booking:*');
+    const all  = (await Promise.all(keys.map(k => redis.get(k)))).filter(Boolean);
+    const filtered = all.filter(b => {
+      if (!b.datetime) return false;
+      const d = b.datetime.split('T')[0];
+      if (weekStart && d < weekStart) return false;
+      if (weekEnd   && d > weekEnd)   return false;
+      return true;
+    }).sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+    return res.json(filtered);
+  }
 
   // ─── DASHBOARD ────────────────────────────────────────────────────────────
   if (resource === 'dashboard') {
