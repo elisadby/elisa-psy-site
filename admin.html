@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Backoffice · Elisa de Bussy</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --cream:      #FAF8F5;
+  --beige:      #F3EFEA;
+  --border:     #E8E2D9;
+  --text:       #2B2927;
+  --muted:      #6B6560;
+  --light:      #B4B2A9;
+  --accent:     #C48A71;
+  --sage:       #8A9A86;
+  --dark:       #2B2927;
+  --sidebar-bg: #232120;
+  --serif:      'Cormorant Garamond', Georgia, serif;
+  --sans:       'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: var(--sans); font-size: 13px; color: var(--text); background: var(--cream); -webkit-font-smoothing: antialiased; }
+
+/* ── LOGIN ── */
+#login-screen {
+  display: flex; align-items: center; justify-content: center;
+  height: 100vh; background: var(--cream);
+}
+.login-card {
+  width: 360px; background: white; border: 1px solid var(--border); padding: 48px 40px;
+}
+.login-logo { font-family: var(--serif); font-size: 22px; color: var(--text); margin-bottom: 4px; }
+.login-sub  { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 36px; }
+.login-label { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 8px; }
+.login-input {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--border); background: var(--cream);
+  font-family: var(--sans); font-size: 13px; color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.login-input:focus { border-color: var(--accent); }
+.login-btn {
+  width: 100%; padding: 11px; margin-top: 20px;
+  background: var(--dark); color: white; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+  transition: background 0.2s;
+}
+.login-btn:hover { background: #3d3a38; }
+.login-error { font-size: 12px; color: #993C1D; margin-top: 12px; display: none; }
+
+/* ── LAYOUT ── */
+#app { display: flex; height: 100vh; display: none; }
+.sidebar {
+  width: 200px; min-width: 200px; background: var(--sidebar-bg);
+  display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+}
+.sid-logo { padding: 22px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.sid-logo-name { font-family: var(--serif); font-size: 15px; color: #FAF8F5; font-weight: 400; }
+.sid-logo-sub  { font-size: 10px; color: #5F5E5A; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+.sid-nav { padding: 8px 0; flex: 1; overflow-y: auto; }
+.sid-section { font-size: 10px; color: #5F5E5A; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 20px 5px; }
+.nav-item {
+  display: flex; align-items: center; gap: 9px; padding: 9px 20px;
+  color: #888780; cursor: pointer; border-left: 2px solid transparent;
+  transition: all 0.15s; font-size: 13px; user-select: none;
+}
+.nav-item:hover  { color: #FAF8F5; background: rgba(255,255,255,0.04); }
+.nav-item.active { color: #FAF8F5; border-left-color: var(--accent); background: rgba(196,138,113,0.1); }
+.nav-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+.sid-foot {
+  padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sid-user { display: flex; align-items: center; gap: 8px; }
+.sid-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; font-weight: 500; flex-shrink: 0; }
+.sid-uname { font-size: 12px; color: #888780; }
+.logout-btn { font-size: 11px; color: #5F5E5A; cursor: pointer; background: none; border: none; padding: 4px; transition: color 0.15s; }
+.logout-btn:hover { color: #FAF8F5; }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { padding: 22px 28px 0; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between; }
+.page-title { font-family: var(--serif); font-size: 26px; color: var(--text); font-weight: 400; }
+.page-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.topbar-actions { display: flex; gap: 8px; }
+.content { flex: 1; overflow-y: auto; padding: 18px 28px 28px; }
+
+/* ── SECTIONS ── */
+.section { display: none; flex-direction: column; gap: 14px; }
+.section.active { display: flex; }
+
+/* ── CARDS & METRICS ── */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.metric { background: white; border: 0.5px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+.metric-label { font-size: 10px; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
+.metric-value { font-family: var(--serif); font-size: 30px; color: var(--text); font-weight: 400; line-height: 1; }
+.metric-sub   { font-size: 11px; color: var(--sage); margin-top: 5px; }
+.metric-goal  { font-size: 11px; color: var(--accent); margin-top: 4px; }
+.prog-track   { height: 3px; background: var(--beige); border-radius: 2px; margin-top: 9px; overflow: hidden; }
+.prog-fill    { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.6s ease; }
+.card { background: white; border: 0.5px solid var(--border); border-radius: 6px; padding: 18px; }
+.card-title { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+/* ── BADGES ── */
+.badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+.b-ok    { background: #EAF3DE; color: #3B6D11; }
+.b-wait  { background: var(--beige); color: var(--muted); }
+.b-warn  { background: #FAEEDA; color: #854F0B; }
+.b-visio { background: #E6F1FB; color: #185FA5; }
+.b-sent  { background: #E6F1FB; color: #185FA5; }
+.b-paid  { background: #EAF3DE; color: #3B6D11; }
+.b-sms   { background: #FAECE7; color: #993C1D; }
+.b-note  { background: #EAF3DE; color: #3B6D11; }
+.b-fact  { background: #FAEEDA; color: #854F0B; }
+
+/* ── RDV ── */
+.rdv-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--beige); }
+.rdv-row:last-child { border-bottom: none; }
+.rdv-time { font-size: 12px; font-weight: 500; color: var(--text); min-width: 44px; }
+.rdv-info { flex: 1; }
+.rdv-name { font-size: 13px; color: var(--text); }
+.rdv-type { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── TODO ── */
+.todo-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--beige); cursor: pointer; }
+.todo-row:last-child { border-bottom: none; }
+.todo-check { width: 16px; height: 16px; border: 1px solid var(--border); border-radius: 3px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.todo-check.done { background: var(--accent); border-color: var(--accent); }
+.todo-text { flex: 1; font-size: 12px; color: var(--text); line-height: 1.4; transition: all 0.15s; }
+.todo-text.done { text-decoration: line-through; color: var(--light); }
+.todo-add { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--beige); }
+.todo-add input { flex: 1; padding: 7px 10px; border: 0.5px solid var(--border); background: var(--cream); font-family: var(--sans); font-size: 12px; color: var(--text); outline: none; }
+.todo-add input:focus { border-color: var(--accent); }
+.btn-sm { padding: 7px 14px; background: var(--dark); color: white; border: none; cursor: pointer; font-family: var(--sans); font-size: 12px; transition: background 0.15s; white-space: nowrap; }
+.btn-sm:hover { background: #3d3a38; }
+.btn-outline { padding: 7px 14px; background: transparent; color: var(--text); border: 0.5px solid var(--border); cursor: pointer; font-family: var(--sans); font-size: 12px; transition: all 0.15s; }
+.btn-outline:hover { background: var(--beige); }
+.btn-accent { padding: 8px 16px; background: var(--accent); color: white; border: none; cursor: pointer; font-family: var(--sans); font-size: 12px; font-weight: 500; transition: opacity 0.15s; }
+.btn-accent:hover { opacity: 0.88; }
+
+/* ── AGENDA ── */
+.agenda-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.agenda-week-label { font-family: var(--serif); font-size: 18px; color: var(--text); flex: 1; }
+.cal-grid { background: white; border: 0.5px solid var(--border); border-radius: 6px; overflow: hidden; }
+.cal-header { display: grid; grid-template-columns: 52px repeat(5, 1fr); border-bottom: 0.5px solid var(--border); }
+.cal-header-cell { padding: 10px 6px; text-align: center; border-left: 0.5px solid var(--border); }
+.cal-header-cell:first-child { border-left: none; }
+.cal-day-num { font-family: var(--serif); font-size: 18px; color: var(--text); font-weight: 400; }
+.cal-day-num.today { color: var(--accent); }
+.cal-day-name { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.cal-body { display: grid; grid-template-columns: 52px repeat(5, 1fr); }
+.cal-time-col { display: flex; flex-direction: column; }
+.cal-time-cell { height: 52px; display: flex; align-items: flex-start; justify-content: flex-end; padding: 4px 8px 0 0; font-size: 11px; color: var(--light); border-bottom: 0.5px solid var(--beige); }
+.cal-time-cell:last-child { border-bottom: none; }
+.cal-day-col { border-left: 0.5px solid var(--border); display: flex; flex-direction: column; }
+.cal-slot { height: 52px; border-bottom: 0.5px solid var(--beige); padding: 3px 4px; }
+.cal-slot:last-child { border-bottom: none; }
+.cal-event { height: 100%; padding: 3px 6px; border-radius: 3px; border-left: 2px solid; overflow: hidden; }
+.cal-event.visio  { background: #FAECE7; border-left-color: var(--accent); }
+.cal-event.cabinet{ background: #EAF3DE; border-left-color: #3B6D11; }
+.cal-event-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-event.visio .cal-event-name   { color: #712B13; }
+.cal-event.cabinet .cal-event-name { color: #27500A; }
+.cal-event-type { font-size: 10px; }
+.cal-event.visio .cal-event-type   { color: #993C1D; }
+.cal-event.cabinet .cal-event-type { color: #3B6D11; }
+.cal-legend { display: flex; gap: 14px; margin-top: 8px; }
+.cal-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.cal-legend-dot  { width: 10px; height: 10px; border-radius: 2px; }
+
+/* ── PATIENTS ── */
+.patients-layout { display: grid; grid-template-columns: 220px 1fr; gap: 14px; align-items: start; }
+.pat-list { display: flex; flex-direction: column; gap: 0; }
+.pat-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; border-radius: 4px; transition: background 0.15s; border-bottom: 0.5px solid var(--beige); }
+.pat-row:last-child { border-bottom: none; }
+.pat-row:hover, .pat-row.active { background: var(--beige); }
+.pat-av { width: 32px; height: 32px; border-radius: 50%; background: var(--beige); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); font-weight: 500; flex-shrink: 0; }
+.pat-name { font-size: 13px; color: var(--text); font-weight: 500; }
+.pat-meta { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.pat-add-btn { display: flex; align-items: center; gap: 6px; padding: 10px 12px; font-size: 12px; color: var(--muted); cursor: pointer; border-top: 0.5px solid var(--border); margin-top: 4px; transition: color 0.15s; }
+.pat-add-btn:hover { color: var(--accent); }
+.fiche { display: flex; flex-direction: column; gap: 12px; }
+.fiche-head { background: white; border: 0.5px solid var(--border); border-radius: 6px; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+.fiche-head-left { display: flex; align-items: center; gap: 14px; }
+.fiche-av { width: 44px; height: 44px; border-radius: 50%; background: var(--beige); display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--muted); font-weight: 500; flex-shrink: 0; }
+.fiche-name { font-family: var(--serif); font-size: 22px; color: var(--text); }
+.fiche-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.fiche-fields { background: white; border: 0.5px solid var(--border); border-radius: 6px; padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field label { font-size: 10px; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.field p { font-size: 13px; color: var(--text); line-height: 1.5; }
+.field.full { grid-column: span 2; }
+.seances-list { display: flex; flex-direction: column; gap: 6px; }
+.seance-card { background: white; border: 0.5px solid var(--border); border-radius: 6px; overflow: hidden; }
+.seance-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; user-select: none; }
+.seance-head:hover { background: var(--cream); }
+.seance-date  { font-size: 12px; font-weight: 500; color: var(--text); min-width: 96px; }
+.seance-label { font-size: 12px; color: var(--muted); flex: 1; }
+.seance-body  { padding: 14px 16px; background: var(--cream); border-top: 0.5px solid var(--border); display: none; }
+.seance-body.open { display: block; }
+.note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.note-field { margin-bottom: 0; }
+.note-field.full { grid-column: span 2; }
+.note-field label { font-size: 10px; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.note-field p, .note-field .note-val { font-size: 12px; color: var(--text); line-height: 1.6; }
+.humeur-dots { display: flex; gap: 4px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--beige); }
+.dot.filled { background: var(--accent); }
+.seance-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border); }
+
+/* ── FACTURATION ── */
+.inv-table { width: 100%; border-collapse: collapse; }
+.inv-table th { font-size: 10px; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; padding: 0 0 10px; text-align: left; border-bottom: 0.5px solid var(--border); font-weight: 400; }
+.inv-table th:last-child { text-align: right; }
+.inv-table td { padding: 9px 0; border-bottom: 0.5px solid var(--beige); vertical-align: middle; font-size: 13px; color: var(--text); }
+.inv-table tr:last-child td { border-bottom: none; }
+.inv-table .inv-num  { font-size: 11px; color: var(--muted); }
+.inv-table .inv-amt  { text-align: right; font-weight: 500; }
+.inv-table .inv-stat { text-align: right; }
+.inv-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.btn-icon { background: none; border: 0.5px solid var(--border); padding: 4px 8px; cursor: pointer; font-size: 11px; color: var(--muted); transition: all 0.15s; border-radius: 3px; }
+.btn-icon:hover { background: var(--beige); color: var(--text); }
+
+/* ── STATS ── */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.bar-label { font-size: 11px; color: var(--muted); width: 28px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 5px; background: var(--beige); border-radius: 3px; overflow: hidden; }
+.bar-fill-stat { height: 100%; background: var(--accent); border-radius: 3px; }
+.bar-val { font-size: 11px; color: var(--text); min-width: 50px; text-align: right; }
+.kpi-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--beige); }
+.kpi-row:last-child { border-bottom: none; }
+.kpi-label { font-size: 12px; color: var(--muted); }
+.kpi-val { font-size: 13px; font-weight: 500; color: var(--text); }
+
+/* ── MODALE ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(43,41,39,0.4); display: none; align-items: center; justify-content: center; z-index: 100; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border: 0.5px solid var(--border); width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+.modal-head { padding: 20px 24px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: var(--serif); font-size: 20px; color: var(--text); }
+.modal-close { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; line-height: 1; }
+.modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+.modal-foot { padding: 14px 24px; border-top: 0.5px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 10px; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; }
+.form-group input, .form-group textarea, .form-group select {
+  padding: 9px 12px; border: 0.5px solid var(--border); background: var(--cream);
+  font-family: var(--sans); font-size: 13px; color: var(--text); outline: none; transition: border-color 0.2s;
+  width: 100%;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); }
+.form-group textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.star-row { display: flex; gap: 6px; }
+.star { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); transition: all 0.15s; }
+.star.on { background: var(--accent); border-color: var(--accent); color: white; }
+
+/* ── EMPTY STATE ── */
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-title { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 6px; }
+.empty-sub { font-size: 12px; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 10px 18px; font-size: 13px; border-radius: 4px; transform: translateY(60px); opacity: 0; transition: all 0.25s; z-index: 200; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── LOADER ── */
+.loader { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--beige); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ─────────────────────────────────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Elisa de Bussy</div>
+    <div class="login-sub">Backoffice cabinet</div>
+    <label class="login-label" for="pwd">Mot de passe</label>
+    <input class="login-input" type="password" id="pwd" autocomplete="current-password" placeholder="••••••••" />
+    <button class="login-btn" id="login-btn">Accéder au backoffice</button>
+    <div class="login-error" id="login-error">Mot de passe incorrect.</div>
+  </div>
+</div>
+
+<!-- ── APP ───────────────────────────────────────────────────────────── -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sid-logo">
+      <div class="sid-logo-name">Elisa de Bussy</div>
+      <div class="sid-logo-sub">Cabinet · Backoffice</div>
+    </div>
+    <nav class="sid-nav">
+      <div class="sid-section">Principal</div>
+      <div class="nav-item active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </div>
+      <div class="nav-item" data-section="agenda">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Agenda
+      </div>
+      <div class="nav-item" data-section="patients">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        Patients
+      </div>
+      <div class="sid-section">Gestion</div>
+      <div class="nav-item" data-section="facturation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+        Facturation
+      </div>
+      <div class="nav-item" data-section="stats">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Statistiques
+      </div>
+    </nav>
+    <div class="sid-foot">
+      <div class="sid-user">
+        <div class="sid-av">E</div>
+        <div class="sid-uname">Elisa de Bussy</div>
+      </div>
+      <button class="logout-btn" id="logout-btn" title="Se déconnecter">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="section-dashboard" class="section active">
+      <div class="topbar">
+        <div>
+          <div class="page-title">Tableau de bord</div>
+          <div class="page-date" id="dash-date"></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn-outline" id="btn-settings">⚙ Objectifs</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="metrics" id="dash-metrics">
+          <div class="metric"><div class="metric-label">RDV ce mois</div><div class="loader"></div></div>
+          <div class="metric"><div class="metric-label">Taux de remplissage</div><div class="loader"></div></div>
+          <div class="metric"><div class="metric-label">CA du mois</div><div class="loader"></div></div>
+          <div class="metric"><div class="metric-label">Factures en attente</div><div class="loader"></div></div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title">RDV du jour</div>
+            <div id="dash-rdv"><div class="loader"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">À faire aujourd'hui</div>
+            <div id="dash-todos"></div>
+            <div class="todo-add">
+              <input type="text" id="todo-input" placeholder="Ajouter une tâche..." />
+              <button class="btn-sm" id="todo-add-btn">Ajouter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENDA -->
+    <div id="section-agenda" class="section">
+      <div class="topbar">
+        <div><div class="page-title">Agenda</div></div>
+        <div class="topbar-actions">
+          <button class="btn-outline" id="agenda-prev">←</button>
+          <button class="btn-outline" id="agenda-next">→</button>
+          <button class="btn-outline" id="agenda-today">Aujourd'hui</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="agenda-nav">
+          <div class="agenda-week-label" id="agenda-week-label"></div>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#FAECE7;border-left:2px solid var(--accent);"></div> Visio</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#EAF3DE;border-left:2px solid #3B6D11;"></div> Cabinet</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div id="section-patients" class="section">
+      <div class="topbar">
+        <div><div class="page-title">Patients</div></div>
+        <div class="topbar-actions">
+          <button class="btn-accent" id="btn-add-patient">+ Nouveau patient</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="patients-layout">
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="pat-list" id="pat-list"></div>
+            <div class="pat-add-btn" id="pat-add-btn2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nouveau patient
+            </div>
+          </div>
+          <div id="fiche-container">
+            <div class="empty">
+              <div class="empty-title">Sélectionner un patient</div>
+              <div class="empty-sub">Cliquez sur un nom pour afficher sa fiche</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTURATION -->
+    <div id="section-facturation" class="section">
+      <div class="topbar">
+        <div><div class="page-title">Facturation</div></div>
+        <div class="topbar-actions">
+          <button class="btn-accent" id="btn-add-invoice">+ Nouvelle facture</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="metrics grid3" id="inv-metrics" style="grid-template-columns:repeat(3,1fr);">
+          <div class="metric"><div class="metric-label">À envoyer</div><div class="loader"></div></div>
+          <div class="metric"><div class="metric-label">Envoyées · non payées</div><div class="loader"></div></div>
+          <div class="metric"><div class="metric-label">Payées ce mois</div><div class="loader"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Toutes les factures</div>
+          <table class="inv-table">
+            <thead><tr>
+              <th style="width:80px;">N°</th>
+              <th>Patient</th>
+              <th style="width:90px;">Date</th>
+              <th style="width:70px;text-align:right;">Montant</th>
+              <th style="width:110px;text-align:right;">Statut</th>
+              <th style="width:100px;"></th>
+            </tr></thead>
+            <tbody id="inv-table-body"><tr><td colspan="6" style="text-align:center;padding:20px;"><div class="loader"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div id="section-stats" class="section">
+      <div class="topbar">
+        <div><div class="page-title">Statistiques</div></div>
+      </div>
+      <div class="content">
+        <div class="stat-grid" id="stats-content">
+          <div class="card"><div class="loader"></div></div>
+          <div class="card"><div class="loader"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── MODALES ─────────────────────────────────────────────────────── -->
+
+<!-- Modal objectifs -->
+<div class="modal-overlay" id="modal-settings">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Objectifs du mois</div>
+      <button class="modal-close" data-close="modal-settings">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Objectif CA mensuel (€)</label><input type="number" id="set-ca" placeholder="1200" /></div>
+        <div class="form-group"><label>Objectif RDV mensuel</label><input type="number" id="set-rdv" placeholder="20" /></div>
+      </div>
+      <div class="form-group"><label>Tarif par séance (€)</label><input type="number" id="set-tarif" placeholder="60" /></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" data-close="modal-settings">Annuler</button>
+      <button class="btn-accent" id="save-settings">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal nouveau patient -->
+<div class="modal-overlay" id="modal-patient">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Nouveau patient</div>
+      <button class="modal-close" data-close="modal-patient">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Prénom</label><input type="text" id="pat-prenom" /></div>
+        <div class="form-group"><label>Nom</label><input type="text" id="pat-nom" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email</label><input type="email" id="pat-email" /></div>
+        <div class="form-group"><label>Téléphone</label><input type="tel" id="pat-tel" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date de naissance</label><input type="date" id="pat-dob" /></div>
+        <div class="form-group"><label>Première séance</label><input type="date" id="pat-debut" /></div>
+      </div>
+      <div class="form-group"><label>Motif initial</label><input type="text" id="pat-motif" placeholder="Anxiété, dépression, burn-out…" /></div>
+      <div class="form-group"><label>Objectifs thérapeutiques</label><textarea id="pat-objectifs" rows="3"></textarea></div>
+      <div class="form-group"><label>Notes initiales</label><textarea id="pat-notes-init" rows="2"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" data-close="modal-patient">Annuler</button>
+      <button class="btn-accent" id="save-patient">Créer le dossier</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal note de séance -->
+<div class="modal-overlay" id="modal-note">
+  <div class="modal" style="width:560px;max-width:95vw;">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-note-title">Note de séance</div>
+      <button class="modal-close" data-close="modal-note">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Date de la séance</label><input type="date" id="note-date" /></div>
+        <div class="form-group"><label>Type</label>
+          <select id="note-type"><option value="visio">Visio</option><option value="cabinet">Cabinet</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Humeur du patient (1 à 5)</label>
+        <div class="star-row" id="note-humeur-stars">
+          <div class="star" data-val="1">1</div>
+          <div class="star" data-val="2">2</div>
+          <div class="star" data-val="3">3</div>
+          <div class="star" data-val="4">4</div>
+          <div class="star" data-val="5">5</div>
+        </div>
+        <input type="hidden" id="note-humeur" value="0" />
+      </div>
+      <div class="form-group"><label>Thèmes abordés</label><input type="text" id="note-themes" placeholder="ex: Anxiété, famille, travail…" /></div>
+      <div class="form-group"><label>Transfert / contre-transfert</label><textarea id="note-transfert" rows="2"></textarea></div>
+      <div class="form-group"><label>Plan pour la prochaine séance</label><textarea id="note-plan" rows="2"></textarea></div>
+      <div class="form-group"><label>Notes libres</label><textarea id="note-libre" rows="3"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" data-close="modal-note">Annuler</button>
+      <button class="btn-accent" id="save-note">Enregistrer la note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal nouvelle facture -->
+<div class="modal-overlay" id="modal-invoice">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Nouvelle facture</div>
+      <button class="modal-close" data-close="modal-invoice">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Patient</label><input type="text" id="inv-patient" placeholder="Nom du patient" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Date de séance</label><input type="date" id="inv-date" /></div>
+        <div class="form-group"><label>Montant (€)</label><input type="number" id="inv-montant" value="60" /></div>
+      </div>
+      <div class="form-group"><label>Description</label><input type="text" id="inv-desc" value="Séance de psychothérapie" /></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" data-close="modal-invoice">Annuler</button>
+      <button class="btn-accent" id="save-invoice">Créer la facture</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const api = async (method, resource, body, id) => {
+  const url = id ? `/api/admin/data?resource=${resource}&id=${id}` : `/api/admin/data?resource=${resource}`;
+  const r = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+};
+
+const showToast = (msg) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+};
+
+const fmtDate = (iso) => {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+};
+
+const fmtTime = (iso) => {
+  if (!iso) return '';
+  return new Date(iso).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+};
+
+const initials = (prenom='', nom='') => `${prenom[0]||''}${nom[0]||''}`.toUpperCase();
+
+// ── AUTH ─────────────────────────────────────────────────────────────
+async function checkAuth() {
+  const r = await fetch('/api/admin/auth');
+  return r.ok && (await r.json()).authenticated;
+}
+
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const pwd = document.getElementById('pwd').value;
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  const r = await fetch('/api/admin/auth', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ password: pwd })
+  });
+  if (r.ok) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    initApp();
+  } else {
+    err.style.display = 'block';
+  }
+});
+
+document.getElementById('pwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  await fetch('/api/admin/auth', { method: 'DELETE' });
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pwd').value = '';
+});
+
+// ── NAV ──────────────────────────────────────────────────────────────
+let currentSection = 'dashboard';
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const sec = el.dataset.section;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('section-' + sec).classList.add('active');
+    currentSection = sec;
+    if (sec === 'dashboard')    loadDashboard();
+    if (sec === 'agenda')       loadAgenda();
+    if (sec === 'patients')     loadPatients();
+    if (sec === 'facturation')  loadInvoices();
+    if (sec === 'stats')        loadStats();
+  });
+});
+
+// ── MODALES ──────────────────────────────────────────────────────────
+document.querySelectorAll('[data-close]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.getElementById(el.dataset.close).classList.remove('open');
+  });
+});
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+const openModal = (id) => document.getElementById(id).classList.add('open');
+
+// ── DASHBOARD ────────────────────────────────────────────────────────
+async function loadDashboard() {
+  document.getElementById('dash-date').textContent =
+    new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  try {
+    const d = await api('GET', 'dashboard');
+    const m = d.metrics;
+
+    document.getElementById('dash-metrics').innerHTML = `
+      <div class="metric">
+        <div class="metric-label">RDV ce mois</div>
+        <div class="metric-value">${m.rdvMois}</div>
+        <div class="metric-sub">Objectif : ${m.objectifRdv} séances</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Taux de remplissage</div>
+        <div class="metric-value">${m.tauxRemplissage}<span style="font-size:16px">%</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:${Math.min(m.tauxRemplissage,100)}%"></div></div>
+        <div class="metric-sub" style="margin-top:6px;">${m.rdvMois} / ${m.objectifRdv} créneaux</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">CA du mois</div>
+        <div class="metric-value">${m.caMois} €</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${Math.min(m.tauxCA,100)}%;background:var(--sage)"></div></div>
+        <div class="metric-goal" style="margin-top:6px;">${m.tauxCA}% · obj. ${m.objectifCA} €</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Factures en attente</div>
+        <div class="metric-value" style="color:var(--accent)">${m.facturesEnAttente}</div>
+        <div class="metric-sub" style="color:var(--accent)">${m.montantEnAttente} € à encaisser</div>
+      </div>
+    `;
+
+    const rdvHtml = d.rdvAujourdhui.length === 0
+      ? '<div class="empty"><div class="empty-sub">Aucun RDV aujourd\'hui</div></div>'
+      : d.rdvAujourdhui.map(b => `
+        <div class="rdv-row">
+          <div class="rdv-time">${fmtTime(b.datetime)}</div>
+          <div class="rdv-info">
+            <div class="rdv-name">${b.prenom} ${b.nom} <span class="badge b-visio">${b.type||'visio'}</span></div>
+            <div class="rdv-type">${b.message ? 'Nouveau patient' : 'Séance de suivi'}</div>
+          </div>
+          <span class="badge ${new Date(b.datetime) < new Date() ? 'b-ok' : 'b-wait'}">${new Date(b.datetime) < new Date() ? 'Terminé' : 'À venir'}</span>
+        </div>`).join('');
+    document.getElementById('dash-rdv').innerHTML = rdvHtml;
+
+    renderTodos(d.todos);
+  } catch(e) { console.error(e); }
+}
+
+function renderTodos(todos) {
+  const el = document.getElementById('dash-todos');
+  if (!todos || todos.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0;">Aucune tâche pour aujourd\'hui 🎉</div>';
+    return;
+  }
+  el.innerHTML = todos.map(t => `
+    <div class="todo-row" onclick="toggleTodo('${t.id}',this)">
+      <div class="todo-check ${t.done ? 'done' : ''}">${t.done ? '✓' : ''}</div>
+      <div class="todo-text ${t.done ? 'done' : ''}">${t.texte}</div>
+      <span class="badge b-${t.type==='note'?'note':t.type==='facture'?'fact':t.type==='sms'?'sms':'wait'}">${t.type}</span>
+    </div>`).join('');
+}
+
+document.getElementById('todo-add-btn').addEventListener('click', async () => {
+  const inp = document.getElementById('todo-input');
+  if (!inp.value.trim()) return;
+  try {
+    await api('POST', 'todos', { texte: inp.value.trim(), type: 'manuel' });
+    inp.value = '';
+    const d = await api('GET', 'todos');
+    renderTodos(d);
+    showToast('Tâche ajoutée');
+  } catch(e) {}
+});
+
+document.getElementById('todo-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('todo-add-btn').click();
+});
+
+async function toggleTodo(id, row) {
+  const check = row.querySelector('.todo-check');
+  const text  = row.querySelector('.todo-text');
+  const done  = !check.classList.contains('done');
+  check.classList.toggle('done', done);
+  check.textContent = done ? '✓' : '';
+  text.classList.toggle('done', done);
+  await api('PUT', 'todos', { done }, id);
+}
+
+document.getElementById('btn-settings').addEventListener('click', async () => {
+  const s = await api('GET', 'settings');
+  document.getElementById('set-ca').value    = s.objectifCA    || 1200;
+  document.getElementById('set-rdv').value   = s.objectifRdv   || 20;
+  document.getElementById('set-tarif').value = s.tarifSeance   || 60;
+  openModal('modal-settings');
+});
+
+document.getElementById('save-settings').addEventListener('click', async () => {
+  await api('POST', 'settings', {
+    objectifCA:  parseInt(document.getElementById('set-ca').value)    || 1200,
+    objectifRdv: parseInt(document.getElementById('set-rdv').value)   || 20,
+    tarifSeance: parseInt(document.getElementById('set-tarif').value) || 60,
+  });
+  document.getElementById('modal-settings').classList.remove('open');
+  showToast('Objectifs mis à jour');
+  loadDashboard();
+});
+
+// ── AGENDA ───────────────────────────────────────────────────────────
+let agendaOffset = 0;
+const HOURS = ['09h','10h','11h','12h','14h','15h','16h','17h'];
+
+function getMondayOf(offset) {
+  const d = new Date();
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() - day + 1 + offset * 7);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+async function loadAgenda() {
+  const monday = getMondayOf(agendaOffset);
+  const days   = Array.from({length:5}, (_,i) => { const d = new Date(monday); d.setDate(d.getDate()+i); return d; });
+  const today  = new Date().toDateString();
+  const labels = ['Lun','Mar','Mer','Jeu','Ven'];
+
+  let bookings = [];
+  try {
+    const d = await api('GET', 'dashboard');
+    bookings = d.rdvAujourdhui || [];
+  } catch(e) {}
+
+  const start = days[0].toISOString().split('T')[0];
+  const end   = days[4].toISOString().split('T')[0];
+  document.getElementById('agenda-week-label').textContent =
+    `Semaine du ${days[0].toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} au ${days[4].toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}`;
+
+  const header = `<div class="cal-header">
+    <div class="cal-header-cell"></div>
+    ${days.map((d,i) => `
+      <div class="cal-header-cell">
+        <div class="cal-day-name">${labels[i]}</div>
+        <div class="cal-day-num ${d.toDateString()===today?'today':''}">${d.getDate()}</div>
+      </div>`).join('')}
+  </div>`;
+
+  const timeCol = `<div class="cal-time-col">${HOURS.map(h=>`<div class="cal-time-cell">${h}</div>`).join('')}</div>`;
+
+  const dayCols = days.map(day => {
+    const dateStr = day.toISOString().split('T')[0];
+    const slots = HOURS.map(h => {
+      const hour = parseInt(h);
+      const bk = bookings.find(b => {
+        const bd = new Date(b.datetime);
+        return bd.toISOString().startsWith(dateStr) && bd.getHours() === hour;
+      });
+      if (bk) {
+        const cls = (bk.type||'visio') === 'cabinet' ? 'cabinet' : 'visio';
+        return `<div class="cal-slot"><div class="cal-event ${cls}">
+          <div class="cal-event-name">${bk.prenom} ${bk.nom[0]}.</div>
+          <div class="cal-event-type">${cls==='visio'?'Visio':'Cabinet'}</div>
+        </div></div>`;
+      }
+      return `<div class="cal-slot"></div>`;
+    }).join('');
+    return `<div class="cal-day-col">${slots}</div>`;
+  }).join('');
+
+  document.getElementById('cal-grid').innerHTML = `${header}<div class="cal-body">${timeCol}${dayCols}</div>`;
+}
+
+document.getElementById('agenda-prev').addEventListener('click',   () => { agendaOffset--; loadAgenda(); });
+document.getElementById('agenda-next').addEventListener('click',   () => { agendaOffset++; loadAgenda(); });
+document.getElementById('agenda-today').addEventListener('click',  () => { agendaOffset=0; loadAgenda(); });
+
+// ── PATIENTS ─────────────────────────────────────────────────────────
+let patients = [];
+let currentPatientId = null;
+
+async function loadPatients() {
+  try {
+    patients = await api('GET', 'patients');
+    renderPatientList();
+  } catch(e) {}
+}
+
+function renderPatientList() {
+  const el = document.getElementById('pat-list');
+  if (!patients.length) {
+    el.innerHTML = '<div class="empty" style="padding:20px;"><div class="empty-sub">Aucun patient encore</div></div>';
+    return;
+  }
+  el.innerHTML = patients.map(p => `
+    <div class="pat-row ${p.id===currentPatientId?'active':''}" data-id="${p.id}">
+      <div class="pat-av">${initials(p.prenom,p.nom)}</div>
+      <div>
+        <div class="pat-name">${p.prenom} ${p.nom}</div>
+        <div class="pat-meta">${p.nbSeances||0} séance${p.nbSeances!==1?'s':''}</div>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('.pat-row').forEach(row => {
+    row.addEventListener('click', () => {
+      currentPatientId = row.dataset.id;
+      renderPatientList();
+      loadFiche(row.dataset.id);
+    });
+  });
+}
+
+async function loadFiche(id) {
+  const fc = document.getElementById('fiche-container');
+  fc.innerHTML = '<div class="loader" style="margin:20px auto;display:block;"></div>';
+  try {
+    const { patient: p, bookings, notes } = await api('GET', 'patients', null, id);
+    const noteMap = {};
+    notes.forEach(n => { const key = n.date; if (!noteMap[key]) noteMap[key] = n; });
+
+    fc.innerHTML = `
+      <div class="fiche">
+        <div class="fiche-head">
+          <div class="fiche-head-left">
+            <div class="fiche-av">${initials(p.prenom,p.nom)}</div>
+            <div>
+              <div class="fiche-name">${p.prenom} ${p.nom}</div>
+              <div class="fiche-sub">Depuis ${fmtDate(p.debut||p.createdAt)} · ${bookings.length} séance${bookings.length!==1?'s':''}</div>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn-outline" onclick="editPatient('${p.id}')">Modifier</button>
+            <button class="btn-accent" onclick="openNoteModal('${p.id}')">+ Note</button>
+          </div>
+        </div>
+        <div class="fiche-fields">
+          <div class="field"><label>Email</label><p>${p.email||'—'}</p></div>
+          <div class="field"><label>Téléphone</label><p>${p.tel||'—'}</p></div>
+          <div class="field"><label>Date de naissance</label><p>${p.dob ? fmtDate(p.dob) : '—'}</p></div>
+          <div class="field"><label>Première séance</label><p>${p.debut ? fmtDate(p.debut) : '—'}</p></div>
+          <div class="field full"><label>Motif initial</label><p>${p.motif||'—'}</p></div>
+          <div class="field full"><label>Objectifs thérapeutiques</label><p>${p.objectifs||'—'}</p></div>
+        </div>
+        <div class="seances-list">
+          ${bookings.length === 0 ? '<div class="empty"><div class="empty-sub">Aucune séance enregistrée</div></div>' :
+            bookings.map((b,i) => {
+              const note = noteMap[b.datetime?.split('T')[0]];
+              const hasNote = !!note;
+              return `
+              <div class="seance-card">
+                <div class="seance-head" onclick="this.nextElementSibling.classList.toggle('open')">
+                  <div class="seance-date">${fmtDate(b.datetime)}</div>
+                  <div class="seance-label">Séance ${bookings.length - i} · ${b.type||'visio'}</div>
+                  <span class="badge ${hasNote?'b-ok':'b-warn'}">${hasNote?'Note rédigée':'À rédiger'}</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;flex-shrink:0;color:var(--light)"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="seance-body">
+                  ${hasNote ? `
+                    <div class="note-grid">
+                      <div class="note-field"><label>Humeur</label>
+                        <div class="humeur-dots">${[1,2,3,4,5].map(n=>`<div class="dot ${n<=(note.humeur||0)?'filled':''}"></div>`).join('')}</div>
+                      </div>
+                      <div class="note-field"><label>Thèmes</label><p>${note.themes||'—'}</p></div>
+                      <div class="note-field full"><label>Transfert / contre-transfert</label><p>${note.transfert||'—'}</p></div>
+                      <div class="note-field full"><label>Plan prochaine séance</label><p>${note.plan||'—'}</p></div>
+                      <div class="note-field full"><label>Notes libres</label><p>${note.libre||'—'}</p></div>
+                    </div>
+                    <div class="seance-actions">
+                      <button class="btn-outline" onclick="openNoteModal('${p.id}','${b.datetime?.split('T')[0]}')">Modifier</button>
+                    </div>
+                  ` : `
+                    <div style="text-align:center;padding:12px 0;">
+                      <button class="btn-accent" onclick="openNoteModal('${p.id}','${b.datetime?.split('T')[0]}')">Rédiger la note</button>
+                    </div>
+                  `}
+                </div>
+              </div>`;
+            }).join('')
+          }
+        </div>
+      </div>`;
+  } catch(e) { fc.innerHTML = '<div class="empty"><div class="empty-sub">Erreur de chargement</div></div>'; }
+}
+
+document.getElementById('btn-add-patient').addEventListener('click', () => openModal('modal-patient'));
+document.getElementById('pat-add-btn2').addEventListener('click',    () => openModal('modal-patient'));
+
+document.getElementById('save-patient').addEventListener('click', async () => {
+  const body = {
+    prenom:    document.getElementById('pat-prenom').value.trim(),
+    nom:       document.getElementById('pat-nom').value.trim(),
+    email:     document.getElementById('pat-email').value.trim(),
+    tel:       document.getElementById('pat-tel').value.trim(),
+    dob:       document.getElementById('pat-dob').value,
+    debut:     document.getElementById('pat-debut').value,
+    motif:     document.getElementById('pat-motif').value.trim(),
+    objectifs: document.getElementById('pat-objectifs').value.trim(),
+    notesInit: document.getElementById('pat-notes-init').value.trim(),
+  };
+  if (!body.prenom || !body.nom) return showToast('Prénom et nom requis');
+  try {
+    await api('POST', 'patients', body);
+    document.getElementById('modal-patient').classList.remove('open');
+    showToast('Patient créé');
+    loadPatients();
+  } catch(e) { showToast('Erreur lors de la création'); }
+});
+
+// Note de séance
+let noteContext = { patientId: null, date: null };
+
+function openNoteModal(patientId, date) {
+  noteContext = { patientId, date: date || new Date().toISOString().split('T')[0] };
+  document.getElementById('note-date').value    = noteContext.date;
+  document.getElementById('note-type').value    = 'visio';
+  document.getElementById('note-humeur').value  = '0';
+  document.getElementById('note-themes').value  = '';
+  document.getElementById('note-transfert').value = '';
+  document.getElementById('note-plan').value    = '';
+  document.getElementById('note-libre').value   = '';
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('on'));
+  const p = patients.find(x => x.id === patientId);
+  document.getElementById('modal-note-title').textContent = p ? `Note · ${p.prenom} ${p.nom}` : 'Note de séance';
+  openModal('modal-note');
+}
+
+document.querySelectorAll('.star').forEach(star => {
+  star.addEventListener('click', () => {
+    const val = parseInt(star.dataset.val);
+    document.getElementById('note-humeur').value = val;
+    document.querySelectorAll('.star').forEach(s => s.classList.toggle('on', parseInt(s.dataset.val) <= val));
+  });
+});
+
+document.getElementById('save-note').addEventListener('click', async () => {
+  const body = {
+    patientId: noteContext.patientId,
+    date:      document.getElementById('note-date').value,
+    type:      document.getElementById('note-type').value,
+    humeur:    parseInt(document.getElementById('note-humeur').value),
+    themes:    document.getElementById('note-themes').value.trim(),
+    transfert: document.getElementById('note-transfert').value.trim(),
+    plan:      document.getElementById('note-plan').value.trim(),
+    libre:     document.getElementById('note-libre').value.trim(),
+  };
+  try {
+    await api('POST', 'notes', body);
+    document.getElementById('modal-note').classList.remove('open');
+    showToast('Note enregistrée');
+    if (currentPatientId) loadFiche(currentPatientId);
+    const todos = await api('GET', 'todos');
+    renderTodos(todos);
+  } catch(e) { showToast('Erreur lors de l\'enregistrement'); }
+});
+
+// ── FACTURATION ──────────────────────────────────────────────────────
+async function loadInvoices() {
+  try {
+    const invoices = await api('GET', 'invoices');
+    const a_envoyer = invoices.filter(i => i.statut === 'a_envoyer');
+    const envoyee   = invoices.filter(i => i.statut === 'envoyee');
+    const now = new Date(); const m = String(now.getMonth()+1).padStart(2,'0'); const y = now.getFullYear();
+    const payees_mois = invoices.filter(i => i.statut === 'payee' && i.createdAt?.startsWith(`${y}-${m}`));
+
+    document.getElementById('inv-metrics').innerHTML = `
+      <div class="metric">
+        <div class="metric-label">À envoyer</div>
+        <div class="metric-value" style="color:#854F0B">${a_envoyer.length}</div>
+        <div class="metric-sub">${a_envoyer.reduce((s,i)=>s+(i.montant||0),0)} €</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Envoyées · non payées</div>
+        <div class="metric-value" style="color:var(--accent)">${envoyee.length}</div>
+        <div class="metric-sub">${envoyee.reduce((s,i)=>s+(i.montant||0),0)} €</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Payées ce mois</div>
+        <div class="metric-value" style="color:#3B6D11">${payees_mois.length}</div>
+        <div class="metric-sub">${payees_mois.reduce((s,i)=>s+(i.montant||0),0)} €</div>
+      </div>
+    `;
+
+    const statutLabel = { a_envoyer:'À envoyer', envoyee:'Envoyée', payee:'Payée' };
+    const statutBadge = { a_envoyer:'b-warn', envoyee:'b-sent', payee:'b-paid' };
+    const next = { a_envoyer:'envoyee', envoyee:'payee' };
+    const nextLabel = { a_envoyer:'Marquer envoyée', envoyee:'Marquer payée' };
+
+    document.getElementById('inv-table-body').innerHTML = invoices.length === 0
+      ? '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">Aucune facture</td></tr>'
+      : invoices.map(inv => `
+        <tr>
+          <td class="inv-num">${inv.numero||'—'}</td>
+          <td>${inv.patient||'—'}</td>
+          <td style="font-size:11px;color:var(--muted);">${inv.date ? fmtDate(inv.date) : fmtDate(inv.createdAt)}</td>
+          <td class="inv-amt">${inv.montant||0} €</td>
+          <td class="inv-stat"><span class="badge ${statutBadge[inv.statut]||'b-wait'}">${statutLabel[inv.statut]||inv.statut}</span></td>
+          <td>
+            <div class="inv-actions">
+              ${next[inv.statut] ? `<button class="btn-icon" onclick="advanceInvoice('${inv.id}','${next[inv.statut]}')">${nextLabel[inv.statut]}</button>` : ''}
+              <button class="btn-icon" onclick="deleteInvoice('${inv.id}')">✕</button>
+            </div>
+          </td>
+        </tr>`).join('');
+  } catch(e) {}
+}
+
+async function advanceInvoice(id, statut) {
+  await api('PUT', 'invoices', { statut }, id);
+  showToast('Facture mise à jour');
+  loadInvoices();
+}
+
+async function deleteInvoice(id) {
+  if (!confirm('Supprimer cette facture ?')) return;
+  await api('DELETE', 'invoices', null, id);
+  showToast('Facture supprimée');
+  loadInvoices();
+}
+
+document.getElementById('btn-add-invoice').addEventListener('click', () => {
+  document.getElementById('inv-date').value = new Date().toISOString().split('T')[0];
+  openModal('modal-invoice');
+});
+
+document.getElementById('save-invoice').addEventListener('click', async () => {
+  const body = {
+    patient: document.getElementById('inv-patient').value.trim(),
+    date:    document.getElementById('inv-date').value,
+    montant: parseFloat(document.getElementById('inv-montant').value)||60,
+    description: document.getElementById('inv-desc').value.trim(),
+  };
+  if (!body.patient) return showToast('Nom du patient requis');
+  try {
+    await api('POST', 'invoices', body);
+    document.getElementById('modal-invoice').classList.remove('open');
+    showToast('Facture créée');
+    loadInvoices();
+  } catch(e) {}
+});
+
+// ── STATS ────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const s = await api('GET', 'stats');
+    const maxCA = Math.max(...s.caParMois.map(m => m.ca), 1);
+    const moisLabels = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+
+    document.getElementById('stats-content').innerHTML = `
+      <div class="card">
+        <div class="card-title">CA mensuel ${new Date().getFullYear()}</div>
+        ${s.caParMois.filter(m=>m.ca>0).map(m => `
+          <div class="bar-row">
+            <div class="bar-label">${moisLabels[parseInt(m.mois)-1]}</div>
+            <div class="bar-track"><div class="bar-fill-stat" style="width:${Math.round(m.ca/maxCA*100)}%"></div></div>
+            <div class="bar-val">${m.ca} €</div>
+          </div>`).join('')}
+        ${s.caParMois.every(m=>m.ca===0) ? '<div class="empty"><div class="empty-sub">Aucune donnée</div></div>' : ''}
+      </div>
+      <div class="card">
+        <div class="card-title">Indicateurs clés</div>
+        <div class="kpi-row"><div class="kpi-label">CA total ${new Date().getFullYear()}</div><div class="kpi-val">${s.caTotal} €</div></div>
+        <div class="kpi-row"><div class="kpi-label">Séances totales</div><div class="kpi-val">${s.totalSeances}</div></div>
+        <div class="kpi-row"><div class="kpi-label">Tarif par séance</div><div class="kpi-val">${s.tarifMoyen} €</div></div>
+        <div class="kpi-row"><div class="kpi-label">Patients actifs</div><div class="kpi-val">${s.patientsActifs}</div></div>
+        <div class="kpi-row"><div class="kpi-label">Patients enregistrés</div><div class="kpi-val">${s.totalPatients}</div></div>
+        <div class="kpi-row"><div class="kpi-label" style="border-top:0.5px solid var(--border);padding-top:8px;margin-top:4px;">Abattement micro-BNC (50%)</div><div class="kpi-val" style="padding-top:8px;">${s.abattementMicroBNC} €</div></div>
+        <div class="kpi-row"><div class="kpi-label">Revenu imposable estimé</div><div class="kpi-val">${s.revenuImposable} €</div></div>
+      </div>
+    `;
+  } catch(e) {}
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
+async function initApp() {
+  loadDashboard();
+}
+
+window.addEventListener('load', async () => {
+  const auth = await checkAuth();
+  if (auth) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    initApp();
+  }
+});
+
+window.openNoteModal = openNoteModal;
+window.editPatient   = (id) => showToast('Modification patient — bientôt disponible');
+window.advanceInvoice = advanceInvoice;
+window.deleteInvoice  = deleteInvoice;
+window.toggleTodo     = toggleTodo;
+</script>
+</body>
+</html>
