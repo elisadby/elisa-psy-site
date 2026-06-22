@@ -48,9 +48,16 @@ export default function handler(req, res) {
     return res.status(200).json({ success: true });
   }
 
+  // Parsing manuel des cookies (Vercel ne parse pas req.cookies nativement)
+  const parsedCookies = req.cookies || Object.fromEntries(
+    (req.headers?.cookie || '').split(';')
+      .map(c => { const [k,...v] = c.trim().split('='); return [k.trim(), decodeURIComponent(v.join('='))]; })
+      .filter(([k]) => k)
+  );
+
   // Vérification de session (GET)
   if (req.method === 'GET') {
-    const cookie = req.cookies?.admin_session || '';
+    const cookie = parsedCookies?.admin_session || '';
     const verified = verify(cookie, SESSION_SECRET);
     if (!verified) return res.status(401).json({ authenticated: false });
     return res.status(200).json({ authenticated: true });
