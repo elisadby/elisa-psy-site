@@ -83,8 +83,9 @@ function buildReminderEmail({ prenom, dateStr, timeStr, meetLink, confirmUrl, is
 }
 
 export default async function handler(req, res) {
-  // Sécurisation via header secret
-  if (req.headers['x-cron-secret'] !== process.env.CRON_SECRET) {
+  // Sécurisation via header Authorization: Bearer <CRON_SECRET> (format Vercel Cron)
+  const authHeader = req.headers['authorization'];
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
