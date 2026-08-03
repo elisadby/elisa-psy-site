@@ -120,9 +120,13 @@ export default async function handler(req, res) {
     }
   }
 
-  const now   = new Date();
-  const in23h = new Date(now.getTime() + 23 * 60 * 60 * 1000);
-  const in25h = new Date(now.getTime() + 25 * 60 * 60 * 1000);
+  // Cibler tous les RDV du lendemain (de 00h00 à 23h59 heure Paris)
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowDate = tomorrow.toLocaleDateString('fr-FR', {
+    timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).split('/').reverse().join('-'); // → YYYY-MM-DD
 
   const allKeys = await redis.keys('booking:*');
   let remindersSent = 0;
@@ -132,7 +136,11 @@ export default async function handler(req, res) {
     if (!booking || booking.reminderSent) continue;
 
     const rdvTime = new Date(booking.datetime);
-    if (rdvTime < in23h || rdvTime > in25h) continue;
+    // Vérifier que le RDV est bien demain (en heure Paris)
+    const rdvDate = rdvTime.toLocaleDateString('fr-FR', {
+      timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).split('/').reverse().join('-');
+    if (rdvDate !== tomorrowDate) continue;
 
     try {
       const dateStr = rdvTime.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'Europe/Paris' });
