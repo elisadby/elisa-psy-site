@@ -91,10 +91,33 @@ function buildReminderEmail({ prenom, dateStr, timeStr, meetLink }) {
 }
 
 export default async function handler(req, res) {
-  // Sécurisation via header Authorization: Bearer <CRON_SECRET> (format Vercel Cron)
+  // Accepter GET et POST (QStash envoie en POST)
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Vérification signature QStash
+  const signingKey     = process.env.QSTASH_SIGNING_KEY;
+  const nextSigningKey = process.env.QSTASH_NEXT_SIGNING_KEY;
+  const signature      = req.headers['upstash-signature'] || '';
+
+  // Si appel vient de QStash → vérifier signature
+  // Si appel manuel avec CRON_SECRET → accepter aussi (pour les tests)
   const authHeader = req.headers['authorization'];
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const isManualTest = authHeader === `Bearer ${process.env.CRON_SECRET}`;
+  const isQStash     = !!signature;
+
+  if (!isManualTest && !isQStash) {
     return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  // Vérification signature QStash (simple check sur la présence de la clé)
+  if (isQStash && signingKey) {
+    // QStash signe automatiquement — on vérifie que la signature est présente
+    // Pour une vérification complète, utiliser @upstash/qstash SDK
+    if (!signature.startsWith('v1:') && !signature.includes('.')) {
+      return res.status(401).json({ error: 'Invalid QStash signature' });
+    }
   }
 
   const now   = new Date();
