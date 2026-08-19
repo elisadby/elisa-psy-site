@@ -98,28 +98,34 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    // Sync synchrone — attend la fin avant de retourner les créneaux
-    try {
-      await syncFromGoogleCalendar();
-    } catch(e) {
-      console.error('SYNC ERROR:', e.message);
-      // On continue même si la sync échoue — on retourne ce qu'on a
-    }
+    const now = new Date();
 
+    // 1. Retourner immédiatement les créneaux déjà en Redis
     const keys = await redis.keys('slot:*');
-    if (!keys.length) return res.json([]);
-
-    const slots = await Promise.all(keys.map(k => redis.get(k)));
-    const valid  = slots.filter(Boolean);
+    const slots = keys.length ? await Promise.all(keys.map(k => redis.get(k))) : [];
+    const valid = slots.filter(Boolean);
 
     if (req.query.all && req.query.token) {
-      return res.json(valid.sort((a,b) => new Date(a.datetime) - new Date(b.datetime)));
+      // Mode admin — sync puis retour complet
+      try { await syncFromGoogleCalendar(); } catch(e) { console.error('SYNC ERROR:', e.message); }
+      const keysAll = await redis.keys('slot:*');
+      const slotsAll = await Promise.all(keysAll.map(k => redis.get(k)));
+      return res.json(slotsAll.filter(Boolean).sort((a,b) => new Date(a.datetime) - new Date(b.datetime)));
     }
 
-    const now       = new Date();
     const available = valid
       .filter(s => !s.booked && new Date(s.datetime) > now)
       .sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
+
+    // 2. Sync en arrière-plan (sans bloquer la réponse)
+    // On vérifie si la dernière sync date de plus de 5 minutes
+    const lastSync = await redis.get('slots:last_sync');
+    const shouldSync = !lastSync || (now - new Date(lastSync)) > 5 * 60 * 1000;
+
+    if (shouldSync) {
+      redis.set('slots:last_sync', now.toISOString());
+      syncFromGoogleCalendar().catch(e => console.error('BG SYNC ERROR:', e.message));
+    }
 
     return res.json(available);
   }
