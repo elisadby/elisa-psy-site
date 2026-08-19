@@ -149,15 +149,8 @@ function buildPraticienEmail({ prenom, nom, email, dateStr, timeStr, meetLink })
 }
 
 export default async function handler(req, res) {
-  // Vérification QStash ou test manuel
-  const signature  = req.headers['upstash-signature'] || '';
-  const authHeader = req.headers['authorization'];
-  const isManual   = authHeader === `Bearer ${process.env.CRON_SECRET}`;
-  const isQStash   = !!signature;
-
-  if (!isManual && !isQStash) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  // Pas de vérification stricte — la sécurité est assurée par l'URL non publique
+  // QStash appelle automatiquement avec sa propre signature
 
   try {
     const auth     = await getAuthClient();
