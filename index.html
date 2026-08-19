@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -20,14 +21,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "@type": "Person",
     "name": "Elisa de Bussy",
     "jobTitle": "Psychopraticienne & thérapeute",
-    "telephone": "+33743777257",
+    "telephone": "+33670936138",
     "email": "edebussy.psy@gmail.com",
     "url": "https://elisa-psy-site.vercel.app",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "25bis avenue du Bédat",
       "postalCode": "33700",
-      "addressLocality": "",
+      "addressLocality": "Mérignac",
       "addressCountry": "FR"
     },
     "knowsLanguage": ["fr", "en", "pt"],
@@ -51,7 +52,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                   "@type": "PostalAddress",
                   "streetAddress": "25bis avenue du Bédat",
                   "postalCode": "33700",
-                  "addressLocality": ""
+                  "addressLocality": "Mérignac"
                 }
               }
             }
@@ -541,7 +542,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
-      align-items: center;
+      align-items: end;
       margin-bottom: 4rem;
     }
     .approche-intro p {
@@ -1295,13 +1296,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p class="section-label">Mon approche</p>
           <h2 class="section-title" style="color:var(--cream);">Une thérapie<br><em>sur mesure</em></h2>
         </div>
-        <div>
-          <p>
-            J'utilise une approche intégrative. Ici, la thérapie est réellement sur mesure : nous ne déroulons pas un protocole tout fait, nous construisons ensemble ce qui vous convient. Je puise dans plusieurs courants validés de la psychologie pour bâtir, avec vous, une prise en charge adaptée à votre histoire, votre rythme et vos objectifs.
-          </p>
-          <p style="color:var(--cream);opacity:0.75;font-size:0.95rem;line-height:1.85;margin-top:1.5rem;">
-            Je m'inspire de plusieurs courants validés de la psychologie : la <strong style="color:var(--cream);opacity:1;">TCC</strong> pour repérer et transformer les pensées et comportements qui entretiennent la souffrance, associée à la <strong style="color:var(--cream);opacity:1;">thérapie des schémas</strong> pour travailler les blocages plus profonds. L'<strong style="color:var(--cream);opacity:1;">approche humaniste</strong> place votre capacité de croissance au centre, dans un cadre authentique et sans jugement. L'<strong style="color:var(--cream);opacity:1;">analyse psychodynamique</strong> éclaire comment votre histoire se rejoue dans le présent. Et la <strong style="color:var(--cream);opacity:1;">TCE</strong> invite à accueillir les émotions non comme des obstacles, mais comme des guides vers le changement.
-          </p>
+        <p>
+          J'utilise une approche intégrative. Ici, la thérapie est réellement sur mesure : nous ne déroulons pas un protocole tout fait, nous construisons ensemble ce qui vous convient. Je puise dans plusieurs courants validés de la psychologie pour bâtir, avec vous, une prise en charge adaptée à votre histoire, votre rythme et vos objectifs.
+        </p>
+      </div>
+
+      <div class="approche-cards reveal">
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>La TCC (Thérapie Cognitive et Comportementale)</h3>
+          <p>Ensemble, nous repérons les pensées et comportements qui entretiennent votre souffrance, et expérimentons pas à pas des alternatives plus aidantes. J'y associe la thérapie des schémas pour apaiser les blocages profonds issus de votre histoire.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>L'Approche Humaniste</h3>
+          <p>Vous êtes au centre. Cette approche part du principe que vous possédez déjà les ressources pour grandir. Mon rôle est de créer l'espace pour qu'elles émergent, dans un cadre authentique et sans jugement.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>L'Analyse Psychodynamique</h3>
+          <p>Nous explorons comment votre histoire se rejoue dans le présent : schémas répétitifs, blocages, conflits internes. Mettre des mots sur ces processus permet souvent de s'en libérer progressivement.</p>
+        </div>
+        <div class="approche-card">
+          <div class="approche-card-icon"></div>
+          <h3>La TCE (Thérapie Centrée sur les Émotions)</h3>
+          <p>Les émotions ne sont pas des obstacles, mais des guides. Nous apprenons à les accueillir et les transformer pour qu'elles deviennent de véritables ressources, et non plus des réactions automatiques.</p>
         </div>
       </div>
     </div>
@@ -1368,47 +1387,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="rdv-booking reveal">
-          <div class="rdv-calendar" id="rdv-calendar">
-            <div class="rdv-calendar-icon">📅</div>
-            <h3>Réserver en ligne</h3>
-            <p>Choisissez votre créneau — confirmation par email immédiate.</p>
-
-
-
-            <div class="cal-widget" id="cal-widget">
-              <div class="cal-nav">
-                <button class="cal-nav-btn" id="cal-prev">&#8249;</button>
-                <span class="cal-month-label" id="cal-month-label"></span>
-                <button class="cal-nav-btn" id="cal-next">&#8250;</button>
-              </div>
-              <div class="cal-grid" id="cal-grid"></div>
-              <div class="cal-slots" id="cal-slots"></div>
-            </div>
-
-            <div class="cal-form" id="cal-form" style="display:none;">
-              <div class="cal-form-recap" id="cal-form-recap"></div>
-              <div class="cal-form-fields">
-                <div class="cal-input-row">
-                  <input class="cal-input" id="f-prenom" type="text" placeholder="Prénom *" required />
-                  <input class="cal-input" id="f-nom" type="text" placeholder="Nom *" required />
-                </div>
-                <input class="cal-input" id="f-email" type="email" placeholder="Email *" required />
-                <input class="cal-input" id="f-tel" type="tel" placeholder="Téléphone *" required />
-                <textarea class="cal-input" id="f-message" placeholder="Message (facultatif)" rows="2"></textarea>
-                <div class="cal-form-actions">
-                  <button class="cal-back-btn" id="cal-back-btn" type="button">← Modifier</button>
-                  <button class="btn-primary cal-submit-btn" id="cal-submit-btn" type="button">Confirmer le rendez-vous</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="cal-confirm" id="cal-confirm" style="display:none;">
-              <div class="cal-confirm-icon">✓</div>
-              <h4>Rendez-vous confirmé !</h4>
-              <p id="cal-confirm-text"></p>
-              <p class="rdv-note" style="margin-top:0.5rem;">Un email de confirmation vous a été envoyé.</p>
-            </div>
+          <!-- Calendly inline widget -->
+          <div class="calendly-inline-widget"
+               data-url="https://calendly.com/edebussy-psy/psychotherapie-teleconsultation?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=C48A71"
+               style="min-width:320px;height:660px;">
           </div>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
         </div>
       </div>
     </div>
@@ -1475,7 +1459,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <a href="#tarifs">Tarifs</a>
           <a href="#rdv">Contact</a>
         </nav>
-        <p class="footer-copy">© 2025 Elisa de Bussy — Psychopraticienne &amp; thérapeute · Téléconsultation</p>
+        <p class="footer-copy">© 2025 Elisa de Bussy — Psychopraticienne &amp; thérapeute · Mérignac &amp; Téléconsultation</p>
         <span class="admin-trigger" id="admin-trigger">admin</span>
       </div>
     </div>
