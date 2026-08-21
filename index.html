@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -188,6 +189,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     /* Hamburger */
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-close { display: none; }
     .hamburger span {
       display: block; width: 24px; height: 1px;
       background: var(--text); transition: var(--transition);
@@ -810,11 +812,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         z-index: 200;
         align-items: center;
         justify-content: center;
-        gap: 2rem;
+        gap: 2.5rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
-      nav.open a {
-        font-size: 1.1rem;
-        letter-spacing: 0.06em;
+      nav.open a { font-size: 1.2rem; letter-spacing: 0.08em; padding: 0.5rem 0; }
+      .nav-close {
+        display: flex;
+        position: absolute;
+        top: 1.5rem; right: 1.5rem;
+        font-size: 1.8rem;
+        color: var(--text);
+        cursor: pointer;
+        background: none;
+        border: none;
+        line-height: 1;
+        padding: 0.5rem;
       }
       .hamburger { z-index: 300; }
 
@@ -1002,65 +1015,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .cal-confirm p { font-size: 0.85rem; color: var(--text-light); }
 
     /* ─── Admin ──────────────────────────────────────────────────── */
-    #admin-panel { background: var(--cream); padding: 5rem 0; border-top: 1px solid var(--beige-mid); }
-    .admin-inner { display: flex; flex-direction: column; gap: 3rem; }
-    .admin-header {
-      display: flex; align-items: flex-start; flex-wrap: wrap; gap: 1rem;
-      justify-content: space-between;
-    }
-    .admin-logout-btn {
-      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.5rem 1.2rem; border: 1px solid var(--beige-mid);
-      background: none; color: var(--text-light); cursor: pointer;
-      transition: var(--transition);
-    }
-    .admin-logout-btn:hover { border-color: var(--text); color: var(--text); }
-    .admin-form { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem; }
-    .admin-form .cal-input { width: auto; flex: 1; min-width: 140px; }
-    .admin-slot-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--beige-mid);
-      font-size: 0.85rem; gap: 1rem;
-    }
-    .admin-slot-row:first-child { border-top: 1px solid var(--beige-mid); }
-    .admin-slot-type {
-      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.2rem 0.6rem; border: 1px solid var(--beige-mid); color: var(--text-light);
-    }
-    .admin-slot-type.cabinet { border-color: var(--sage); color: var(--sage); }
-    .admin-slot-type.visio { border-color: var(--accent); color: var(--accent); }
-    .admin-del-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--text-light); font-size: 1rem; padding: 0 0.25rem;
-      transition: var(--transition);
-    }
-    .admin-del-btn:hover { color: #c0392b; }
-    .admin-booking-row { padding: 1rem; border-bottom: 1px solid var(--beige-mid); font-size: 0.83rem; }
-    .admin-booking-row:first-child { border-top: 1px solid var(--beige-mid); }
-    .admin-booking-name { font-weight: 500; margin-bottom: 0.2rem; }
-    .admin-booking-detail { color: var(--text-light); font-size: 0.78rem; }
 
-    .admin-modal {
-      position: fixed; inset: 0; z-index: 500;
-      background: rgba(43,41,39,0.5);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .admin-modal-box {
-      background: var(--cream); padding: 2.5rem;
-      width: 100%; max-width: 360px; position: relative;
-    }
-    .admin-modal-close {
-      position: absolute; top: 1rem; right: 1rem;
-      background: none; border: none; cursor: pointer;
-      font-size: 1rem; color: var(--text-light);
-    }
-    .admin-error { color: #c0392b; font-size: 0.78rem; margin-top: 0.5rem; }
-    .admin-trigger {
-      font-size: 0.68rem; color: rgba(250,248,245,0.2);
-      cursor: pointer; letter-spacing: 0.08em; transition: var(--transition);
-    }
-    .admin-trigger:hover { color: rgba(250,248,245,0.5); }
 
     /* ─── Bouton flottant mobile ─────────────────────────────────── */
     .floating-rdv {
@@ -1098,6 +1053,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <header id="header">
     <a href="#accueil" class="logo">Elisa de Bussy <span>Psychopraticienne &amp; thérapeute</span></a>
     <nav id="main-nav">
+      <button class="nav-close" id="nav-close" aria-label="Fermer">✕</button>
       <a href="#accueil">Accueil</a>
       <a href="#qui-suis-je">Qui suis-je</a>
       <a href="#approche">Mon approche</a>
@@ -1133,31 +1089,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ─── MA BOUSSOLE ──────────────────────────────────────────────── -->
-  <section id="boussole">
-    <div class="container">
-      <div class="boussole-inner">
-        <div class="reveal">
-          <p class="section-label">Ma boussole</p>
-          <h2 class="section-title">Ce qui <em>guide</em><br>chaque séance</h2>
-        </div>
-        <div class="boussole-cards reveal">
-          <div class="boussole-card">
-            <h3>Alliance thérapeutique</h3>
-            <p>Une relation chaleureuse, égalitaire et sans jugement.</p>
-          </div>
-          <div class="boussole-card">
-            <h3>Approche intégrative</h3>
-            <p>Une approche qui tient compte de tout ce que vous êtes.</p>
-          </div>
-          <div class="boussole-card">
-            <h3>Cadre sécurisant</h3>
-            <p>Un espace clair, ajusté à votre rythme et à vos objectifs, où vous restez acteur de votre suivi.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ─── POURQUOI CONSULTER ───────────────────────────────────────── -->
   <section id="pourquoi">
@@ -1235,6 +1166,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="step-num">03</div>
           <h3>Avancer à votre rythme</h3>
           <p>Nous définissons ensemble vos objectifs et la fréquence des séances. Vous restez acteur de votre suivi : vous pouvez ajuster, mettre en pause si nécessaire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MA BOUSSOLE ──────────────────────────────────────────────── -->
+  <section id="boussole">
+    <div class="container">
+      <div class="boussole-inner">
+        <div class="reveal">
+          <p class="section-label">Ma boussole</p>
+          <h2 class="section-title">Ce qui <em>guide</em><br>chaque séance</h2>
+        </div>
+        <div class="boussole-cards reveal">
+          <div class="boussole-card">
+            <h3>Alliance thérapeutique</h3>
+            <p>Une relation chaleureuse, égalitaire et sans jugement.</p>
+          </div>
+          <div class="boussole-card">
+            <h3>Approche intégrative</h3>
+            <p>Une approche qui tient compte de tout ce que vous êtes.</p>
+          </div>
+          <div class="boussole-card">
+            <h3>Cadre sécurisant</h3>
+            <p>Un espace clair, ajusté à votre rythme et à vos objectifs, où vous restez acteur de votre suivi.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1377,40 +1334,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ─── ADMIN ──────────────────────────────────────────────────────── -->
-  <section id="admin-panel" style="display:none;">
-    <div class="container">
-      <div class="admin-inner">
-        <div class="admin-header">
-          <h2 class="section-title" style="margin-bottom:0.25rem;">Espace <em>Admin</em></h2>
-          <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-            <button class="admin-logout-btn" id="admin-google-auth">🔗 Connecter Google Agenda</button>
-            <button class="admin-logout-btn" id="admin-sync-btn">↻ Synchroniser maintenant</button>
-            <button class="admin-logout-btn" id="admin-logout">Déconnexion</button>
-          </div>
-        </div>
-        <div class="admin-add-slot">
-          <p class="section-label">Ajouter un créneau</p>
-          <div class="admin-form">
-            <input class="cal-input" type="date" id="admin-date" />
-            <input class="cal-input" type="time" id="admin-time" step="1800" />
-            <div class="rdv-types" style="max-width:260px;margin:0;">
-              <button type="button" class="rdv-type-btn active" data-type="cabinet" id="admin-type-cabinet">Cabinet</button>
-              <button type="button" class="rdv-type-btn" data-type="visio" id="admin-type-visio">Visio</button>
-            </div>
-            <button class="btn-primary" id="admin-add-btn" type="button">+ Ajouter</button>
-          </div>
-        </div>
-        <div>
-          <p class="section-label">Créneaux à venir</p>
-          <div id="admin-slots-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
-        </div>
-        <div>
-          <p class="section-label">Réservations</p>
-          <div id="admin-bookings-container"><p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <div class="admin-modal" id="admin-modal" style="display:none;">
     <div class="admin-modal-box">
@@ -1438,7 +1361,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <a href="#rdv">Contact</a>
         </nav>
         <p class="footer-copy">© 2025 Elisa de Bussy — Psychopraticienne &amp; thérapeute · Téléconsultation</p>
-        <span class="admin-trigger" id="admin-trigger">admin</span>
       </div>
     </div>
   </footer>
@@ -1466,7 +1388,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     /* ─── Hamburger ─────────────────────────────────────────────── */
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('main-nav');
-    hamburger.addEventListener('click', () => nav.classList.toggle('open'));
+    hamburger.addEventListener('click', () => {
+      nav.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+    const navClose = document.getElementById('nav-close');
+    if (navClose) {
+      navClose.addEventListener('click', () => {
+        nav.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
     nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
 
     /* ─── Scroll reveal ─────────────────────────────────────────── */
@@ -1688,168 +1626,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     /* ═══════════════════════════════════════════════════════════════
        ADMIN PANEL
     ═══════════════════════════════════════════════════════════════ */
-    (function initAdmin() {
-      const ADMIN_PWD = "elisa2025"; // ← change ce mot de passe !
-
-      const trigger     = document.getElementById('admin-trigger');
-      const modal       = document.getElementById('admin-modal');
-      const modalClose  = document.getElementById('admin-modal-close');
-      const loginBtn    = document.getElementById('admin-login-btn');
-      const pwdInput    = document.getElementById('admin-pwd');
-      const errorMsg    = document.getElementById('admin-error');
-      const panel       = document.getElementById('admin-panel');
-      const logoutBtn   = document.getElementById('admin-logout');
-      const addBtn      = document.getElementById('admin-add-btn');
-      const adminDate   = document.getElementById('admin-date');
-      const adminTime   = document.getElementById('admin-time');
-      const slotsBox    = document.getElementById('admin-slots-container');
-      const bookingsBox = document.getElementById('admin-bookings-container');
-
-      let adminType  = 'visio';
-      let adminToken = sessionStorage.getItem('admin_token') || null;
-      if (adminToken) showPanel();
-
-      document.querySelectorAll('#admin-panel .rdv-type-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#admin-panel .rdv-type-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          adminType = btn.dataset.type;
-        });
-      });
-
-      // Bouton connexion Google
-      document.getElementById('admin-google-auth').addEventListener('click', async () => {
-        try {
-          const res  = await fetch(`${API_BASE}/api/auth/url`);
-          const data = await res.json();
-          window.open(data.url, '_blank');
-        } catch(e) {
-          alert('Erreur lors de la génération du lien Google.');
-        }
-      });
-
-      // Bouton sync manuelle
-      document.getElementById('admin-sync-btn').addEventListener('click', async () => {
-        const btn = document.getElementById('admin-sync-btn');
-        btn.textContent = '↻ Synchronisation…';
-        btn.disabled = true;
-        try {
-          const res  = await fetch(`${API_BASE}/api/sync`);
-          const data = await res.json();
-          alert(`Synchronisation terminée — ${data.slotsCreated} créneau(x) ajouté(s).`);
-          loadAdminData();
-        } catch(e) {
-          alert('Erreur de synchronisation.');
-        }
-        btn.textContent = '↻ Synchroniser maintenant';
-        btn.disabled = false;
-      });
-
-      trigger.addEventListener('click', () => {
-        modal.style.display = 'flex';
-        pwdInput.value = ''; errorMsg.style.display = 'none';
-        setTimeout(() => pwdInput.focus(), 100);
-      });
-      modalClose.addEventListener('click', () => modal.style.display = 'none');
-      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
-
-      loginBtn.addEventListener('click', () => {
-        if (pwdInput.value === ADMIN_PWD) {
-          adminToken = btoa(Date.now());
-          sessionStorage.setItem('admin_token', adminToken);
-          modal.style.display = 'none';
-          showPanel();
-        } else {
-          errorMsg.style.display = 'block';
-          pwdInput.value = ''; pwdInput.focus();
-        }
-      });
-      pwdInput.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
-
-      logoutBtn.addEventListener('click', () => {
-        adminToken = null;
-        sessionStorage.removeItem('admin_token');
-        panel.style.display = 'none';
-      });
-
-      function showPanel() {
-        panel.style.display = 'block';
-        panel.scrollIntoView({ behavior:'smooth', block:'start' });
-        loadAdminData();
-      }
-
-      async function loadAdminData() {
-        slotsBox.innerHTML    = '<p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>';
-        bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Chargement…</p>';
-        try {
-          const [slotsRes, bookingsRes] = await Promise.all([
-            fetch(`${API_BASE}/api/slots?all=true&token=${adminToken}`),
-            fetch(`${API_BASE}/api/bookings?token=${adminToken}`)
-          ]);
-          renderAdminSlots(await slotsRes.json());
-          renderAdminBookings(await bookingsRes.json());
-        } catch(e) {
-          slotsBox.innerHTML = bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Erreur de chargement.</p>';
-        }
-      }
-
-      function renderAdminSlots(slots) {
-        const future = slots.filter(s => new Date(s.datetime) >= new Date())
-          .sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
-        if (!future.length) { slotsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucun créneau à venir.</p>'; return; }
-        slotsBox.innerHTML = future.map(s => {
-          const d  = new Date(s.datetime);
-          const ds = d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric', month:'short' });
-          const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-          return `<div class="admin-slot-row">
-            <span>${ds} à ${ts}</span>
-            <span class="admin-slot-type ${s.type}">${s.type === 'cabinet' ? 'Cabinet' : 'Visio'}</span>
-            <span style="font-size:0.78rem;color:${s.booked ? '#c0392b' : 'var(--sage)'};">${s.booked ? 'Réservé' : 'Libre'}</span>
-            <button class="admin-del-btn" data-id="${s.id}" title="Supprimer">✕</button>
-          </div>`;
-        }).join('');
-        slotsBox.querySelectorAll('.admin-del-btn').forEach(btn => {
-          btn.addEventListener('click', async () => {
-            if (!confirm('Supprimer ce créneau ?')) return;
-            await fetch(`${API_BASE}/api/slots/${btn.dataset.id}?token=${adminToken}`, { method:'DELETE' });
-            loadAdminData();
-          });
-        });
-      }
-
-      function renderAdminBookings(bookings) {
-        const sorted = [...bookings].sort((a,b) => new Date(a.datetime) - new Date(b.datetime));
-        if (!sorted.length) { bookingsBox.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">Aucune réservation.</p>'; return; }
-        bookingsBox.innerHTML = sorted.map(b => {
-          const d  = new Date(b.datetime);
-          const ds = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-          const ts = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
-          return `<div class="admin-booking-row">
-            <div class="admin-booking-name">${b.prenom} ${b.nom}</div>
-            <div class="admin-booking-detail">${ds} à ${ts} · ${b.type === 'cabinet' ? 'Cabinet' : 'Visio'}</div>
-            <div class="admin-booking-detail">${b.email} · ${b.tel}</div>
-            ${b.message ? `<div class="admin-booking-detail" style="font-style:italic;">"${b.message}"</div>` : ''}
-          </div>`;
-        }).join('');
-      }
-
-      addBtn.addEventListener('click', async () => {
-        const date = adminDate.value, time = adminTime.value;
-        if (!date || !time) { alert('Merci de choisir une date et une heure.'); return; }
-        const datetime = new Date(`${date}T${time}:00`).toISOString();
-        addBtn.textContent = '…'; addBtn.disabled = true;
-        try {
-          await fetch(`${API_BASE}/api/slots`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ datetime, type: adminType, token: adminToken })
-          });
-          adminDate.value = ''; adminTime.value = '';
-          loadAdminData();
-        } catch(e) { alert("Erreur lors de l'ajout."); }
-        addBtn.textContent = '+ Ajouter'; addBtn.disabled = false;
-      });
-    })();
+    
   </script>
 </body>
 </html>
