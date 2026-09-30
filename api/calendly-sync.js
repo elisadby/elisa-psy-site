@@ -172,7 +172,19 @@ export default async function handler(req, res) {
     let processed = 0;
 
     for (const event of events) {
-      // Vérifier que c'est un événement Calendly (contient un invité patient)
+      // Bug 1 — ignorer les événements annulés
+      if (event.status === 'cancelled') continue;
+
+      // Bug 2 — ignorer les événements qui ne viennent pas de Calendly
+      const isCalendly = (
+        event.summary?.toLowerCase().includes('psychothérapie') ||
+        event.summary?.toLowerCase().includes('psychotherapie') ||
+        event.description?.includes('calendly.com') ||
+        (event.attendees || []).some(a => a.email?.includes('calendly'))
+      );
+      if (!isCalendly) continue;
+
+      // Vérifier que c'est un événement avec un invité patient
       const attendees = event.attendees || [];
       const patientAttendee = attendees.find(a => a.email !== process.env.PRAT_EMAIL && !a.organizer);
       if (!patientAttendee) continue;
