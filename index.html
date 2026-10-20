@@ -1535,24 +1535,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     /* ─── Hamburger ─────────────────────────────────────────────── */
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('main-nav');
+    let scrollY = 0;
+    function lockScroll() {
+      scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+    }
+    function unlockScroll() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
+    }
     hamburger.addEventListener('click', () => {
       nav.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      lockScroll();
     });
     const navClose = document.getElementById('nav-close');
     if (navClose) {
       navClose.addEventListener('click', () => {
         nav.classList.remove('open');
-        document.body.style.overflow = '';
+        unlockScroll();
       });
     }
     nav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
-        document.body.style.overflow = '';
+        unlockScroll();
       });
     });
-    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
 
     /* ─── Scroll reveal ─────────────────────────────────────────── */
     const reveals = document.querySelectorAll('.reveal');
