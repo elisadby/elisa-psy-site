@@ -499,6 +499,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       transform: rotate(180deg);
     }
 
+    .about-header-mobile { display: none; }
     .about-content { padding-left: 1rem; }
     .about-content .section-label { margin-bottom: 0.5rem; }
     .about-name {
@@ -877,8 +878,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         min-height: auto;
         padding-top: 4rem;
       }
-      .hero-content { padding: 2rem 1.25rem 2.5rem; order: 1; }
-      .hero-image-wrap { height: 55vw; min-height: 220px; max-height: 280px; order: 2; }
+      .hero-content { padding: 2rem 1.25rem 2.5rem; order: 2; }
+      .hero-image-wrap { height: 55vw; min-height: 220px; max-height: 280px; order: 1; }
       .hero-image-wrap::after { background: linear-gradient(to bottom, transparent 70%, var(--cream)); }
       .hero-badge { left: 1rem; bottom: 1rem; }
 
@@ -888,8 +889,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       .pourquoi-grid { grid-template-columns: 1fr; gap: 3rem; }
       .steps { grid-template-columns: 1fr; gap: 2px; }
 
-      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .about-image-wrap { max-width: 480px; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-image-wrap { max-width: 100%; order: 1; }
+      .about-content { order: 2; }
+      .about-content .section-label,
+      .about-content .about-name,
+      .about-content .about-title { display: none; }
+      .about-header-mobile { display: block; margin-bottom: 1.5rem; }
       .about-image-accent { display: none; }
       .about-tag { display: none; }
       .about-content { padding-left: 0; }
@@ -1134,6 +1140,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- ─── QUI SUIS-JE ──────────────────────────────────────────────── -->
   <section id="qui-suis-je">
     <div class="container">
+      <div class="about-header-mobile">
+        <p class="section-label">Qui suis-je</p>
+        <h2 class="about-name">Elisa de Bussy</h2>
+        <p class="about-title">Psychopraticienne &amp; thérapeute</p>
+      </div>
       <div class="about-grid">
         <div class="about-image-wrap reveal">
           <div class="about-image-main">
