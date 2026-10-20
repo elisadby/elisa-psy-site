@@ -523,6 +523,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .about-content p strong { color: var(--text); font-weight: 500; }
 
+    .formations-accordion { margin: 1.5rem 0; border: 1px solid var(--beige-mid); border-radius: 10px; overflow: hidden; }
+    .formations-accordion summary { cursor: pointer; padding: 0.85rem 1.2rem; font-size: 0.88rem; font-weight: 600; color: var(--text); list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .formations-accordion summary::after { content: '+'; font-size: 1.1rem; color: var(--accent); transition: transform 0.2s; }
+    .formations-accordion[open] summary::after { content: '\2212'; }
+    .formations-accordion summary::-webkit-details-marker { display: none; }
+    .formations-list { margin: 0; padding: 0 1.2rem 1rem; list-style: none; border-top: 1px solid var(--beige-mid); }
+    .formations-list li { padding: 0.7rem 0; border-bottom: 1px solid var(--beige-mid); }
+    .formations-list li:last-child { border-bottom: none; }
+    .formations-list li strong { display: block; font-size: 0.88rem; color: var(--text); font-weight: 600; margin-bottom: 0.15rem; }
+    .formations-list li span { font-size: 0.8rem; color: var(--text-light); }
+
     .langs {
       display: flex; gap: 0.75rem; flex-wrap: wrap;
       margin: 1.5rem 0 2rem;
@@ -589,6 +600,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
 
     /* ─── Tarifs ─────────────────────────────────────────────────── */
+    /* ── VISIO ── */
+    #visio { padding: 7rem 0; background: var(--beige); }
+    #visio .section-title { text-align: center; font-family: var(--serif); font-size: clamp(1.7rem, 3.5vw, 2.6rem); font-weight: 600; color: var(--text); margin-bottom: 1rem; }
+    #visio .section-intro { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; color: var(--text-light); font-size: 1rem; line-height: 1.75; }
+    .visio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-bottom: 3rem; }
+    .visio-how h3, .visio-benefits h3 { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 1.5rem; }
+    .visio-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.4rem; }
+    .visio-steps li { display: flex; gap: 1rem; align-items: flex-start; }
+    .step-num { flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--serif); font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 0.15rem; }
+    .visio-steps li strong { display: block; font-size: 0.93rem; color: var(--text); margin-bottom: 0.25rem; }
+    .visio-steps li p { margin: 0; font-size: 0.85rem; color: var(--text-light); line-height: 1.65; }
+    .benefits-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2rem; }
+    .benefits-list li { display: flex; gap: 1rem; align-items: flex-start; background: var(--cream); border-radius: 10px; padding: 1rem 1.2rem; }
+    .benefit-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .benefits-list li strong { display: block; font-size: 0.9rem; color: var(--text); margin-bottom: 0.2rem; }
+    .benefits-list li p { margin: 0; font-size: 0.83rem; color: var(--text-light); line-height: 1.6; }
+    .visio-science { background: var(--cream); border-left: 3px solid var(--sage); border-radius: 8px; padding: 1.4rem 1.8rem; max-width: 720px; margin: 0 auto; }
+    .visio-science p { margin: 0 0 0.4rem; font-size: 0.9rem; color: var(--text); line-height: 1.7; }
+    .visio-science p:last-child { margin: 0; }
+    .visio-science-source { font-size: 0.78rem !important; color: var(--text-light) !important; }
+    @media (max-width: 768px) {
+      .visio-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
     #tarifs { padding: 7rem 0; }
     .tarifs-inner {
       display: grid;
@@ -837,7 +872,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         padding-top: 5rem;
       }
       .hero-content { padding: 3rem 2rem; order: 2; }
-      .hero-image-wrap { height: 55vw; min-height: 280px; order: 1; }
+      .hero-image-wrap { height: 40vw; min-height: 180px; order: 1; }
       .hero-image-wrap::after { background: linear-gradient(to bottom, transparent 70%, var(--cream)); }
       .hero-badge { left: 1rem; bottom: 1rem; }
 
@@ -1039,7 +1074,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .floating-rdv:hover { background: var(--text); box-shadow: 0 4px 20px rgba(43,41,39,0.3); }
     @media (max-width: 768px) {
-      .floating-rdv { display: block; }
+      .floating-rdv { display: block; opacity: 0; pointer-events: none; }
     }
   </style>
 </head>
@@ -1056,6 +1091,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="nav-close" id="nav-close" aria-label="Fermer">✕</button>
       <a href="#accueil">Accueil</a>
       <a href="#qui-suis-je">Qui suis-je</a>
+      <a href="#visio">Séances en visio</a>
       <a href="#approche">Mon approche</a>
       <a href="#tarifs">Tarifs</a>
       <a href="#rdv" class="nav-cta">Prendre RDV</a>
@@ -1086,6 +1122,63 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         alt="Elisa de Bussy, psychopraticienne"
         loading="eager"
       />
+    </div>
+  </section>
+  <!-- ─── QUI SUIS-JE ──────────────────────────────────────────────── -->
+  <section id="qui-suis-je">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap reveal">
+          <div class="about-image-main">
+            <img
+              src="portrait.png"
+              alt="Elisa de Bussy, psychopraticienne"
+            />
+          </div>
+
+          <div class="about-tag">Psychopraticienne</div>
+        </div>
+
+        <div class="about-content reveal">
+          <p class="section-label">Qui suis-je</p>
+          <h2 class="about-name">Elisa de Bussy</h2>
+          <p class="about-title">Psychopraticienne &amp; thérapeute</p>
+
+          <p>
+            Je suis devenue psychologue par passion pour l'humain. Dans un monde déjà si compliqué à naviguer, j'avais envie d'apporter quelque chose de concret : de l'écoute, de l'empathie, et un espace où les gens peuvent enfin être vus pour ce qu'ils sont vraiment.
+          </p>
+          <p>
+            Avant la psychologie, j'ai passé cinq ans dans le marketing digital. C'est en vivant à l'étranger, un an en Australie puis plusieurs années au Portugal, que quelque chose a changé. Sortir de ma zone de confort, questionner mes certitudes, découvrir qu'il existe mille façons de penser et de vivre sa vie : ça m'a rendue plus résiliente, et surtout plus curieuse des autres.
+          </p>
+          <p>
+            Mes séances sont chaleureuses et authentiques, toujours dans la bienveillance. Parfois confrontantes aussi, quand il faut se poser les questions difficiles. Ce qui m'importe avant tout : que vous vous sentiez en sécurité pour explorer ce qui est douloureux, et accepté(e) pour ce que vous êtes, pas pour ce que vous devriez être.
+          </p>
+          <p style="font-style:italic;border-left:2px solid var(--accent);padding-left:1rem;color:var(--text);">
+            Je ne crois pas aux thérapeutes qui savent mieux que vous ce dont vous avez besoin. Mon rôle n'est pas de vous donner des réponses, mais de créer les conditions pour que vous les trouviez vous-même.
+          </p>
+
+          <details class="formations-accordion">
+            <summary>Mes formations</summary>
+            <ul class="formations-list">
+              <li>
+                <strong>Licence de Psychologie</strong>
+                <span>Université de Rennes 2</span>
+              </li>
+              <li>
+                <strong>Master en Psychologie Clinique et de la Santé</strong>
+                <span>Université Egas Moniz, Lisbonne</span>
+              </li>
+            </ul>
+          </details>
+
+          <div class="langs">
+            <span class="lang-tag">Français</span>
+            <span class="lang-tag">English</span>
+            <span class="lang-tag">Português</span>
+          </div>
+
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1123,25 +1216,102 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </li>
             <li class="situation-item">
               <div class="situation-icon"></div>
-              <p><strong>Mal-être durable</strong>Troubles du sommeil, idées sombres, conduites addictives.</p>
+              <p><strong>Mal-être durable</strong>Dépression, burn-out, troubles du sommeil, conduites addictives.</p>
             </li>
             <li class="situation-item">
               <div class="situation-icon"></div>
-              <p><strong>Surcharge émotionnelle</strong>Difficulté à dire non, épuisement professionnel.</p>
+              <p><strong>Surcharge émotionnelle</strong>Anxiété, crises d'angoisse, épuisement professionnel.</p>
             </li>
             <li class="situation-item">
               <div class="situation-icon"></div>
-              <p><strong>Perte de repères</strong>Sentiment de vide, doutes sur sa valeur personnelle.</p>
+              <p><strong>Perte de repères</strong>Manque de confiance en soi, sentiment de vide, TCA.</p>
             </li>
             <li class="situation-item">
               <div class="situation-icon"></div>
-              <p><strong>Émotions débordantes</strong>Ruminations, irritabilité, réactions disproportionnées.</p>
+              <p><strong>Émotions débordantes</strong>Ruminations, irritabilité, traumatismes non résolus.</p>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- ─── LA THÉRAPIE EN VISIO ───────────────────────────────────────── -->
+  <section id="visio">
+    <div class="container">
+      <h2 class="section-title">La thérapie en visio : aussi efficace, plus accessible</h2>
+      <p class="section-intro">La consultation à distance n'est pas un pis-aller. Des études cliniques montrent que la psychothérapie par vidéo obtient des résultats comparables à la thérapie en présentiel — avec une flexibilité qui lève souvent les derniers obstacles à commencer.</p>
+
+      <div class="visio-grid">
+        <div class="visio-how">
+          <h3>Comment ça se passe ?</h3>
+          <ol class="visio-steps">
+            <li>
+              <span class="step-num">1</span>
+              <div>
+                <strong>Vous réservez un créneau</strong>
+                <p>Via le formulaire en ligne, vous choisissez le jour et l'heure qui vous conviennent.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <div>
+                <strong>Vous recevez un lien de connexion</strong>
+                <p>Un lien sécurisé vous est envoyé par e-mail avant la séance. Pas d'application à installer.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <div>
+                <strong>La séance se déroule dans votre espace</strong>
+                <p>Depuis chez vous, depuis votre bureau, depuis n'importe où en France, au moment qui vous appartient.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="visio-benefits">
+          <h3>Ce que ça change</h3>
+          <ul class="benefits-list">
+            <li>
+              <span class="benefit-icon">🗓</span>
+              <div>
+                <strong>Pas de contrainte géographique</strong>
+                <p>Accessible depuis toute la France, en déplacement, à l'étranger.</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon">🏠</span>
+              <div>
+                <strong>Un cadre que vous choisissez</strong>
+                <p>Votre environnement familier peut favoriser la parole et la confiance.</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon">⏱</span>
+              <div>
+                <strong>Pas de temps de trajet</strong>
+                <p>La séance s'intègre dans votre journée sans déplacements ni salle d'attente.</p>
+              </div>
+            </li>
+            <li>
+              <span class="benefit-icon">🔒</span>
+              <div>
+                <strong>Une discrétion renforcée</strong>
+                <p>Certaines personnes se sentent plus libres de s'exprimer depuis chez elles.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="visio-science">
+        <p>Des méta-analyses portant sur des centaines de patients confirment que la thérapie en visio produit des effets cliniques comparables à la thérapie en face-à-face, que ce soit pour l'anxiété, la dépression ou d'autres difficultés.</p>
+        <p class="visio-science-source">Source : Luo et al., <em>Teletherapy Versus In-Person Psychotherapy for Depression</em>, Journal of Psychiatric Research, 2022</p>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ─── COMMENT ÇA SE PASSE ─────────────────────────────────────── -->
   <section id="comment">
@@ -1170,7 +1340,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
   </section>
-
   <!-- ─── MA BOUSSOLE ──────────────────────────────────────────────── -->
   <section id="boussole">
     <div class="container">
@@ -1192,50 +1361,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <h3>Cadre sécurisant</h3>
             <p>Un espace clair, ajusté à votre rythme et à vos objectifs, où vous restez acteur de votre suivi.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── QUI SUIS-JE ──────────────────────────────────────────────── -->
-  <section id="qui-suis-je">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-image-wrap reveal">
-          <div class="about-image-main">
-            <img
-              src="portrait.png"
-              alt="Elisa de Bussy, psychopraticienne"
-            />
-          </div>
-
-          <div class="about-tag">Psychopraticienne</div>
-        </div>
-
-        <div class="about-content reveal">
-          <p class="section-label">Qui suis-je</p>
-          <h2 class="about-name">Elisa de Bussy</h2>
-          <p class="about-title">Psychopraticienne &amp; thérapeute</p>
-
-          <p>
-            J'ai suivi une formation en psychologie clinique dans un contexte multiculturel. Après avoir obtenu une licence en psychologie à l'université de Rennes, j'ai poursuivi un Master en Psychologie Clinique et de la Santé à l'Université Egas Moniz, à Lisbonne. Mes stages m'ont conduite à me centrer sur l'accompagnement des adultes, avec une pratique intégrative.
-          </p>
-          <p>
-            Avant de me dévouer à la psychologie, j'ai évolué pendant 5 ans dans l'univers du marketing digital. En 2020, animée par le besoin de placer l'humain et l'écoute authentique au cœur de mon quotidien, j'ai initié ma reconversion vers la Psychologie.
-          </p>
-          <p>
-            Mon histoire s'est enrichie à l'étranger : un an en Australie, sept ans au Portugal. Ces années m'ont permis de développer une fine sensibilité interculturelle : vous accueillir dans le respect absolu de votre singularité, de vos racines et de vos codes.
-          </p>
-          <p style="font-style:italic;border-left:2px solid var(--accent);padding-left:1rem;color:var(--text);">
-            Je ne crois pas aux thérapeutes qui savent mieux que vous ce dont vous avez besoin. Mon rôle n'est pas de vous donner des réponses, mais de créer les conditions pour que vous les trouviez vous-même.
-          </p>
-
-          <div class="langs">
-            <span class="lang-tag">Français</span>
-            <span class="lang-tag">English</span>
-            <span class="lang-tag">Português</span>
-          </div>
-
         </div>
       </div>
     </div>
@@ -1356,6 +1481,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <nav class="footer-nav">
           <a href="#accueil">Accueil</a>
           <a href="#qui-suis-je">Qui suis-je</a>
+          <a href="#visio">Séances en visio</a>
           <a href="#approche">Approche</a>
           <a href="#tarifs">Tarifs</a>
           <a href="#rdv">Contact</a>
@@ -1375,13 +1501,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 60);
-      // Masquer le bouton flottant quand on est sur la section RDV
+      // Bouton flottant : apparaît après 300px de scroll, disparaît sur la section RDV
       const rdvSection = document.getElementById('rdv');
       const floatingBtn = document.getElementById('floating-rdv');
       if (floatingBtn && rdvSection) {
         const rdvTop = rdvSection.getBoundingClientRect().top;
-        floatingBtn.style.opacity = rdvTop < window.innerHeight ? '0' : '1';
-        floatingBtn.style.pointerEvents = rdvTop < window.innerHeight ? 'none' : 'auto';
+        const scrolled = window.scrollY > 300;
+        const onRdv = rdvTop < window.innerHeight;
+        floatingBtn.style.opacity = (scrolled && !onRdv) ? '1' : '0';
+        floatingBtn.style.pointerEvents = (scrolled && !onRdv) ? 'auto' : 'none';
       }
     });
 
