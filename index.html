@@ -188,11 +188,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .nav-cta::after { display: none !important; }
 
     /* Hamburger */
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 0.5rem; }
     .nav-close { display: none; }
     .hamburger span {
-      display: block; width: 24px; height: 1px;
-      background: var(--text); transition: var(--transition);
+      display: block; width: 24px; height: 1.5px;
+      background: var(--text); transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
     }
 
     /* ─── Hero ───────────────────────────────────────────────────── */
@@ -665,7 +666,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       color: var(--text-light);
       padding: 0.5rem 0;
       border-bottom: 1px solid var(--beige-mid);
-      display: flex; align-items: center; gap: 0.75rem;
+      display: flex; align-items: flex-start; gap: 0.75rem;
     }
     .tarif-features li::before {
       content: ''; display: block;
@@ -673,6 +674,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       border-radius: 50%;
       background: var(--sage);
       flex-shrink: 0;
+      margin-top: 0.45em;
     }
 
     /* ─── Contact / RDV ──────────────────────────────────────────── */
@@ -844,9 +846,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     /* ─── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 900px) {
       nav { display: none; }
-      .hamburger { display: flex; }
+      .hamburger { display: flex; z-index: 300; position: relative; }
 
-      nav.open {
+      nav {
         display: flex;
         flex-direction: column;
         position: fixed;
@@ -858,21 +860,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         gap: 2.5rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
       }
-      nav.open a { font-size: 1.2rem; letter-spacing: 0.08em; padding: 0.5rem 0; }
-      .nav-close {
-        display: flex;
-        position: absolute;
-        top: 1.5rem; right: 1.5rem;
-        font-size: 1.8rem;
-        color: var(--text);
-        cursor: pointer;
-        background: none;
-        border: none;
-        line-height: 1;
-        padding: 0.5rem;
+      nav.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
       }
-      .hamburger { z-index: 300; }
+      nav a { font-size: 1.2rem; letter-spacing: 0.08em; padding: 0.5rem 0; }
+
+      /* Burger → croix */
+      .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+      .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
       #accueil {
         grid-template-columns: 1fr;
@@ -1549,19 +1552,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       window.scrollTo(0, scrollY);
     }
     hamburger.addEventListener('click', () => {
-      nav.classList.add('open');
-      lockScroll();
-    });
-    const navClose = document.getElementById('nav-close');
-    if (navClose) {
-      navClose.addEventListener('click', () => {
+      const isOpen = nav.classList.contains('open');
+      if (isOpen) {
         nav.classList.remove('open');
+        hamburger.classList.remove('open');
         unlockScroll();
-      });
-    }
+      } else {
+        nav.classList.add('open');
+        hamburger.classList.add('open');
+        lockScroll();
+      }
+    });
     nav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         nav.classList.remove('open');
+        hamburger.classList.remove('open');
         unlockScroll();
       });
     });
