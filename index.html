@@ -73,7 +73,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="theme-color" content="#C48A71" />
 
   <!-- Preload LCP image -->
-  <link rel="preload" as="image" href="hero.png" fetchpriority="high" />
+  <link rel="preload" as="image" href="hero.webp" fetchpriority="high" />
 
   <!-- Google Fonts — non-blocking load -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1140,13 +1140,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="hero-image-wrap">
       <!-- Photo portrait cozy & naturelle -->
-      <img
-        src="hero.png"
-        alt="Elisa de Bussy, psychopraticienne"
-        fetchpriority="high"
-        loading="eager"
-        decoding="async"
-      />
+      <picture>
+        <source srcset="hero.webp" type="image/webp" />
+        <img
+          src="hero.jpg"
+          alt="Elisa de Bussy, psychopraticienne"
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
     </div>
   </section>
   <!-- ─── QUI SUIS-JE ──────────────────────────────────────────────── -->
@@ -1160,12 +1163,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="about-grid">
         <div class="about-image-wrap reveal">
           <div class="about-image-main">
-            <img
-              src="portrait.png"
-              alt="Elisa de Bussy, psychopraticienne"
-              loading="lazy"
-              decoding="async"
-            />
+            <picture>
+              <source srcset="portrait.webp" type="image/webp" />
+              <img
+                src="portrait.jpg"
+                alt="Elisa de Bussy, psychopraticienne"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           </div>
 
           <div class="about-tag">Psychopraticienne</div>
