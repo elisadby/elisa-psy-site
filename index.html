@@ -532,16 +532,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .about-content p strong { color: var(--accent); font-weight: 600; }
     .about-content p strong.accent { color: var(--accent); font-weight: 600; }
 
-    .formations-accordion { margin: 1.5rem 0; border: 1px solid var(--beige-mid); border-radius: 10px; overflow: hidden; }
-    .formations-accordion summary { cursor: pointer; padding: 0.85rem 1.2rem; font-size: 0.88rem; font-weight: 600; color: var(--text); list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
-    .formations-accordion summary::after { content: '+'; font-size: 1.1rem; color: var(--accent); transition: transform 0.2s; }
-    .formations-accordion[open] summary::after { content: '\2212'; }
-    .formations-accordion summary::-webkit-details-marker { display: none; }
-    .formations-list { margin: 0; padding: 0 1.2rem 1rem; list-style: none; border-top: 1px solid var(--beige-mid); }
-    .formations-list li { padding: 0.7rem 0; border-bottom: 1px solid var(--beige-mid); }
-    .formations-list li:last-child { border-bottom: none; }
-    .formations-list li strong { display: block; font-size: 0.88rem; color: var(--text); font-weight: 600; margin-bottom: 0.15rem; }
-    .formations-list li span { font-size: 0.8rem; color: var(--text-light); }
+    .about-diplomes { margin: 1.25rem 0 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .about-diplome-item { display: flex; align-items: flex-start; gap: 0.75rem; background: var(--cream); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 0.65rem 1rem; }
+    .diplome-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .about-diplome-item div { display: flex; flex-direction: column; gap: 0.1rem; }
+    .about-diplome-item strong { font-size: 0.85rem; font-weight: 600; color: var(--text); font-family: var(--font-sans); }
+    .about-diplome-item span { font-size: 0.78rem; color: var(--text-light); font-family: var(--font-sans); }
 
     .langs {
       display: flex; gap: 0.75rem; flex-wrap: wrap;
@@ -1160,6 +1156,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="section-label">Qui suis-je</p>
         <h2 class="about-name">Elisa de Bussy</h2>
         <p class="about-title">Psychopraticienne &amp; thérapeute</p>
+        <div class="about-diplomes">
+          <div class="about-diplome-item">
+            <span class="diplome-icon">🎓</span>
+            <div>
+              <strong>Master en Psychologie Clinique et de la Santé</strong>
+              <span>Université Egas Moniz, Lisbonne</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="about-grid">
         <div class="about-image-wrap reveal">
@@ -1183,6 +1188,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <h2 class="about-name">Elisa de Bussy</h2>
           <p class="about-title">Psychopraticienne &amp; thérapeute</p>
 
+          <div class="about-diplomes">
+            <div class="about-diplome-item">
+              <span class="diplome-icon">🎓</span>
+              <div>
+                <strong>Master en Psychologie Clinique et de la Santé</strong>
+                <span>Université Egas Moniz, Lisbonne</span>
+              </div>
+            </div>
+          </div>
+
           <p>
             Je me suis spécialisée dans la santé mentale par passion pour l'humain. Dans un monde déjà si compliqué à naviguer, j'avais envie d'apporter quelque chose de concret : de l'<strong>écoute</strong>, de l'<strong>empathie</strong>, et un espace où les gens peuvent enfin être vus pour ce qu'ils sont vraiment.
           </p>
@@ -1196,19 +1211,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             Je ne crois pas aux thérapeutes qui savent mieux que vous ce dont vous avez besoin. Mon rôle n'est pas de vous donner des réponses, mais de créer les conditions pour que vous les trouviez vous-même.
           </p>
 
-          <details class="formations-accordion">
-            <summary>Mes formations</summary>
-            <ul class="formations-list">
-              <li>
-                <strong>Licence de Psychologie</strong>
-                <span>Université de Rennes 2</span>
-              </li>
-              <li>
-                <strong>Master en Psychologie Clinique et de la Santé</strong>
-                <span>Université Egas Moniz, Lisbonne</span>
-              </li>
-            </ul>
-          </details>
 
           <div class="langs">
             <span class="lang-tag">Français</span>
