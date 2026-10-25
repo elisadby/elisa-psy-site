@@ -1813,19 +1813,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     /* ── Calendly lazy load ─────────────────────────────────────── */
     (function() {
       var calendlyLoaded = false;
+      function loadCalendly() {
+        if (calendlyLoaded) return;
+        calendlyLoaded = true;
+        var s = document.createElement('script');
+        s.src = 'https://assets.calendly.com/assets/external/widget.js';
+        s.async = true;
+        document.body.appendChild(s);
+      }
       var container = document.getElementById('calendly-container');
-      if (!container) return;
-      var observer = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !calendlyLoaded) {
-          calendlyLoaded = true;
-          var s = document.createElement('script');
-          s.src = 'https://assets.calendly.com/assets/external/widget.js';
-          s.async = true;
-          document.body.appendChild(s);
-          observer.disconnect();
-        }
-      }, { rootMargin: '200px' });
-      observer.observe(container);
+      if (!container) { loadCalendly(); return; }
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          if (entries[0].isIntersecting) {
+            loadCalendly();
+            observer.disconnect();
+          }
+        }, { rootMargin: '400px' });
+        observer.observe(container);
+        // Fallback : charge après 2s quoi qu'il arrive
+        setTimeout(loadCalendly, 2000);
+      } else {
+        loadCalendly();
+      }
     })();
 
   </script>
